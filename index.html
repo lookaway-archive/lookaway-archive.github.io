@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOOKAWAY ARCHIVE - SPECIMEN CONTAINMENT</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: #E53E2C;
+    font-family: 'Courier New', monospace;
+    padding: 60px 40px;
+    min-height: 100vh;
+    cursor: crosshair;
+}
+
+.archive-header {
+    text-align: center;
+    margin-bottom: 80px;
+    border-bottom: 1px solid rgba(229, 62, 44, 0.3);
+    padding-bottom: 40px;
+}
+
+.archive-title {
+    font-size: 16px;
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px currentColor;
+    opacity: 0.9;
+}
+
+.archive-subtitle {
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: 0.6;
+    font-style: italic;
+}
+
+.specimens-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.specimen-entry {
+    border: 1px solid rgba(229, 62, 44, 0.4);
+    padding: 30px;
+    margin-bottom: 40px;
+    background: rgba(229, 62, 44, 0.02);
+    transition: all 0.3s;
+}
+
+.specimen-entry:hover {
+    background: rgba(229, 62, 44, 0.05);
+    border-color: rgba(229, 62, 44, 0.6);
+}
+
+.specimen-code {
+    font-size: 18px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px currentColor;
+}
+
+.specimen-meta {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 25px;
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+.meta-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    opacity: 0.8;
+}
+
+.meta-label {
+    color: rgba(229, 62, 44, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.meta-value {
+    color: rgba(229, 62, 44, 0.9);
+}
+
+.specimen-description {
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 25px;
+    opacity: 0.75;
+    font-style: italic;
+}
+
+.access-link {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid rgba(229, 62, 44, 0.5);
+    background: rgba(229, 62, 44, 0.05);
+    color: rgba(229, 62, 44, 0.8);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 10px;
+    transition: all 0.3s;
+}
+
+.access-link:hover {
+    background: rgba(229, 62, 44, 0.1);
+    border-color: rgba(229, 62, 44, 0.8);
+    color: rgba(229, 62, 44, 1);
+    text-shadow: 0 0 10px currentColor;
+}
+
+.status-contained {
+    color: #E53E2C;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 100px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(229, 62, 44, 0.2);
+    font-size: 9px;
+    letter-spacing: 1px;
+    opacity: 0.4;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 40px 20px;
+    }
+    
+    .meta-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+    
+    .specimen-entry {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="archive-header">
+    <div class="archive-title">LOOKAWAY ARCHIVE</div>
+    <div class="archive-subtitle">Specimen Containment & Documentation Facility</div>
+</div>
+
+<div class="specimens-container">
+    
+    <!-- SPECIMEN 001 -->
+    <div class="specimen-entry">
+        <div class="specimen-code">SPECIMEN: LEAK-WORM-847T</div>
+        
+        <div class="specimen-meta">
+            <div class="meta-row">
+                <span class="meta-label">Deployed:</span>
+                <span class="meta-value">October 08, 2025</span>
+            </div>
+            <div class="meta-row">
+                <span class="meta-label">Classification:</span>
+                <span class="meta-value">Interactive Narrative Specimen</span>
+            </div>
+            <div class="meta-row">
+                <span class="meta-label">Function:</span>
+                <span class="meta-value">Explores quantum measurement paradox through Tlönian archaeological lens</span>
+            </div>
+            <div class="meta-row">
+                <span class="meta-label">Mechanism:</span>
+                <span class="meta-value">JavaScript organism with decay lifecycle, electron beam collision, particle drift</span>
+            </div>
+            <div class="meta-row">
+                <span class="meta-label">Tools:</span>
+                <span class="meta-value">Vanilla JS, CSS Variables, Web Audio API</span>
+            </div>
+            <div class="meta-row">
+                <span class="meta-label">Status:</span>
+                <span class="meta-value status-contained">● CONTAINED</span>
+            </div>
+        </div>
+        
+        <div class="specimen-description">
+            Archived documentation from the Parallax Archive detailing Earth's century-long "measurement problem" in quantum mechanics. The specimen exhibits temporal decay behaviors and responds to user interaction through a CRT-simulated display environment.
+        </div>
+        
+        <a href="/leak-worm-847t/" class="access-link">ACCESS SPECIMEN →</a>
+    </div>
+    
+    <!-- Future specimens will be added here -->
+    
+</div>
+
+<div class="footer">
+    LOOKAWAY ARCHIVE © 2025 — SPECIMEN PRESERVATION PROTOCOL v1.0
+</div>
+
+</body>
+</html>
