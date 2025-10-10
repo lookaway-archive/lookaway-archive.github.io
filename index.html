@@ -3,8 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOOKAWAY ARCHIVE - SPECIMEN CONTAINMENT</title>
+<title>LOOKAWAY ARCHIVE - Specimen Containment Facility</title>
+
 <style>
+/* ============================================
+   VISUAL CORTEX - Warm formaldehyde preservation system
+   ============================================ */
+
+:root {
+    /* Preservation fluid colors - WARM PALETTE */
+    --core-r: 70;
+    --core-g: 60;
+    --core-b: 35;
+    --glow-r: 150;
+    --glow-g: 130;
+    --glow-b: 70;
+    --text-r: 185;
+    --text-g: 140;
+    --text-b: 36;
+    --text-opacity: 1.0;
+    
+    /* Title hierarchy */
+    --title-r: 185;
+    --title-g: 140;
+    --title-b: 36;
+    --subtitle-r: 118;
+    --subtitle-g: 77;
+    --subtitle-b: 10;
+    
+    /* Decay flesh popup colors - WARM TONES */
+    --popup-bg-r: 90;
+    --popup-bg-g: 75;
+    --popup-bg-b: 50;
+    --popup-border-r: 180;
+    --popup-border-g: 150;
+    --popup-border-b: 100;
+    --popup-text-r: 220;
+    --popup-text-g: 200;
+    --popup-text-b: 170;
+    --popup-glow-r: 160;
+    --popup-glow-g: 140;
+    --popup-glow-b: 90;
+    --popup-label-r: 140;
+    --popup-label-g: 120;
+    --popup-label-b: 80;
+    
+    /* Password flash - BRUISED PURPLE-BLUE (darker, more saturated blue) */
+    --flash-bg-r: 40;
+    --flash-bg-g: 25;
+    --flash-bg-b: 80;
+    --flash-border-r: 90;
+    --flash-border-g: 60;
+    --flash-border-b: 220;
+    --flash-text-r: 200;
+    --flash-text-g: 180;
+    --flash-text-b: 255;
+    --flash-glow-r: 110;
+    --flash-glow-g: 80;
+    --flash-glow-b: 240;
+    
+    /* Membrane colors - YELLOW GLASS */
+    --membrane-r: 255;
+    --membrane-g: 224;
+    --membrane-b: 98;
+    
+    /* Beam parameters */
+    --beam-color-r: 150;
+    --beam-color-g: 130;
+    --beam-color-b: 70;
+    --beam-speed: 12s;
+    --beam-start-position: 0%;
+    
+    /* Atmosphere - MORE VISIBLE */
+    --particle-base-opacity: 0.12;
+    --particle-decay-multiplier: 1.0;
+    
+    /* Breathing */
+    --breathing-speed: 30s;
+    --breathing-opacity-min: 0.7;
+    --breathing-opacity-max: 0.85;
+    
+    /* Vignette */
+    --vignette-radius: 85%;
+    --vignette-opacity: 0.02;
+    
+    /* Scanlines */
+    --scanline-opacity: 0.10;
+    --scanline-speed: 3.0s;
+    
+    /* Text effects */
+    --text-glow-spread: 40px;
+    --text-glow-intensity: 0.3;
+    --text-title-blur: 0.2px;
+    --text-body-blur: 0.15px;
+    
+    /* Power */
+    --flicker-speed: 0.3s;
+    --flicker-brightness: 1.0;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -13,196 +110,1061 @@
 
 body {
     background: #000;
-    color: #E53E2C;
+    overflow-x: hidden;
     font-family: 'Courier New', monospace;
-    padding: 60px 40px;
-    min-height: 100vh;
     cursor: crosshair;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-.archive-header {
+/* CRT CONTAINER */
+.crt {
+    position: fixed;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.crt::before {
+    content: '';
+    position: fixed;
+    inset: -25%;
+    background: radial-gradient(
+        ellipse at center,
+        rgb(var(--core-r), var(--core-g), var(--core-b)) 0%,
+        rgba(var(--core-r), var(--core-g), var(--core-b), 0.6) 35%,
+        black 75%
+    );
+    opacity: var(--breathing-opacity-min);
+    animation: breathe var(--breathing-speed) ease-in-out infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes breathe {
+    50% { 
+        opacity: var(--breathing-opacity-max);
+        filter: brightness(1.2);
+    }
+}
+
+/* SCANLINES */
+.scanlines {
+    position: fixed;
+    top: -100px;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh + 200px);
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 2px,
+        black 2px,
+        black 4px
+    );
+    background-size: 100% 4px;
+    opacity: var(--scanline-opacity);
+    animation: scan var(--scanline-speed) linear infinite;
+    pointer-events: none;
+    z-index: 999;
+}
+
+@keyframes scan {
+    to { transform: translateY(4px); }
+}
+
+/* VIGNETTE */
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at center,
+        transparent var(--vignette-radius),
+        rgba(0, 0, 0, var(--vignette-opacity)) 100%
+    );
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* TANK HEADER */
+.tank-header {
     text-align: center;
-    margin-bottom: 80px;
-    border-bottom: 1px solid rgba(229, 62, 44, 0.3);
-    padding-bottom: 40px;
+    padding: 0 20px 40px 20px;
+    position: relative;
+    z-index: 2;
 }
 
 .archive-title {
-    font-size: 16px;
-    letter-spacing: 4px;
+    font-size: 24px;
+    color: rgb(var(--title-r), var(--title-g), var(--title-b));
+    text-transform: uppercase;
+    letter-spacing: 5px;
     margin-bottom: 15px;
-    text-shadow: 0 0 10px currentColor;
-    opacity: 0.9;
+    text-shadow: 
+        0 0 8px rgba(var(--title-r), var(--title-g), var(--title-b), 1.0),
+        0 0 16px rgba(var(--title-r), var(--title-g), var(--title-b), 0.8),
+        0 0 32px rgba(var(--title-r), var(--title-g), var(--title-b), 0.6);
+    filter: blur(var(--text-title-blur)) brightness(var(--flicker-brightness));
+    animation: title-flicker var(--flicker-speed) infinite;
 }
 
 .archive-subtitle {
-    font-size: 11px;
+    font-size: 13px;
+    color: rgb(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b));
     letter-spacing: 2px;
-    opacity: 0.6;
     font-style: italic;
+    text-shadow: 
+        0 0 4px rgba(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b), 0.5);
 }
 
-.specimens-container {
+@keyframes title-flicker {
+    0%, 100% { opacity: 1; }
+    3% { opacity: 0.55; }
+    5% { opacity: 1; }
+    7% { opacity: 0.6; }
+    9% { opacity: 1; }
+    45% { opacity: 1; }
+    46% { opacity: 0.5; }
+    47% { opacity: 1; }
+    80% { opacity: 1; }
+    82% { opacity: 0.6; }
+    83% { opacity: 1; }
+}
+
+/* MEMBRANE GRID */
+.membrane-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
     max-width: 900px;
-    margin: 0 auto;
+    width: 100%;
+    padding: 0 40px;
+    position: relative;
+    z-index: 2;
 }
 
-.specimen-entry {
-    border: 1px solid rgba(229, 62, 44, 0.4);
-    padding: 30px;
-    margin-bottom: 40px;
-    background: rgba(229, 62, 44, 0.02);
-    transition: all 0.3s;
+/* TANK FOOTER */
+.tank-footer {
+    text-align: center;
+    padding: 40px 20px 0 20px;
+    position: relative;
+    z-index: 2;
 }
 
-.specimen-entry:hover {
-    background: rgba(229, 62, 44, 0.05);
-    border-color: rgba(229, 62, 44, 0.6);
-}
-
-.specimen-code {
-    font-size: 18px;
-    letter-spacing: 3px;
-    margin-bottom: 20px;
-    text-shadow: 0 0 8px currentColor;
-}
-
-.specimen-meta {
-    display: grid;
-    gap: 10px;
-    margin-bottom: 25px;
+.date-tag {
     font-size: 11px;
-    line-height: 1.8;
-}
-
-.meta-row {
-    display: grid;
-    grid-template-columns: 140px 1fr;
+    color: rgb(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b));
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 
+        0 0 4px rgba(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b), 0.5);
     opacity: 0.8;
 }
 
-.meta-label {
-    color: rgba(229, 62, 44, 0.6);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+/* MEMBRANE BUTTONS */
+.membrane {
+    position: relative;
+    aspect-ratio: 7/3;
+    min-height: 90px;
+    max-height: 110px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Default fallback - will be overridden by specimen color */
+    background: rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.05);
+    backdrop-filter: blur(10px) saturate(1.2);
+    border: 1px solid rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.3);
+    border-radius: 8px;
+    
+    box-shadow: 
+        inset 0 0 20px rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.1),
+        0 4px 20px rgba(0, 0, 0, 0.5);
+    
+    transition: all 0.3s ease;
+    cursor: crosshair;
 }
 
-.meta-value {
-    color: rgba(229, 62, 44, 0.9);
+/* Specimen-specific coloring (data-driven) */
+.membrane.has-specimen {
+    background: rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.05);
+    border: 1px solid rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.3);
+    box-shadow: 
+        inset 0 0 20px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.1),
+        0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
-.specimen-description {
-    font-size: 13px;
-    line-height: 1.7;
-    margin-bottom: 25px;
-    opacity: 0.75;
-    font-style: italic;
+.membrane.has-specimen:hover {
+    background: rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.08);
+    border-color: rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.6);
+    transform: translateY(-2px);
+    box-shadow: 
+        inset 0 0 25px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.15),
+        0 8px 30px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.3);
 }
 
-.access-link {
-    display: inline-block;
-    padding: 10px 20px;
-    border: 1px solid rgba(229, 62, 44, 0.5);
-    background: rgba(229, 62, 44, 0.05);
-    color: rgba(229, 62, 44, 0.8);
-    text-decoration: none;
-    text-transform: uppercase;
+.membrane.has-specimen.beam-contact {
+    border-color: rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.9);
+    box-shadow: 
+        inset 0 0 30px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.3),
+        0 0 20px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.6);
+}
+
+/* Idle Animations - Subtle floating in fluid */
+.membrane.anim-float {
+    animation: membrane-float var(--anim-speed, 4s) ease-in-out infinite;
+}
+
+.membrane.anim-breathe {
+    animation: membrane-breathe var(--anim-speed, 5s) ease-in-out infinite;
+}
+
+.membrane.anim-pulse {
+    animation: membrane-pulse var(--anim-speed, 3s) ease-in-out infinite;
+}
+
+.membrane.anim-drift {
+    animation: membrane-drift var(--anim-speed, 6s) ease-in-out infinite;
+}
+
+@keyframes membrane-float {
+    0%, 100% { 
+        transform: translateY(0px) translateX(0px);
+    }
+    25% { 
+        transform: translateY(-3px) translateX(1px);
+    }
+    50% { 
+        transform: translateY(-5px) translateX(-1px);
+    }
+    75% { 
+        transform: translateY(-2px) translateX(0px);
+    }
+}
+
+@keyframes membrane-breathe {
+    0%, 100% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.02);
+        opacity: 0.95;
+    }
+}
+
+@keyframes membrane-pulse {
+    0%, 100% { 
+        box-shadow: 
+            inset 0 0 20px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.1),
+            0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    50% { 
+        box-shadow: 
+            inset 0 0 30px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.2),
+            0 4px 25px rgba(0, 0, 0, 0.6),
+            0 0 15px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.3);
+    }
+}
+
+@keyframes membrane-drift {
+    0%, 100% { 
+        transform: translateX(0px) rotate(0deg);
+    }
+    25% { 
+        transform: translateX(2px) rotate(0.5deg);
+    }
+    50% { 
+        transform: translateX(-2px) rotate(-0.5deg);
+    }
+    75% { 
+        transform: translateX(1px) rotate(0.2deg);
+    }
+}
+
+.membrane:hover {
+    background: rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.08);
+    border-color: rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.5);
+    transform: translateY(-2px);
+    box-shadow: 
+        inset 0 0 25px rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.15),
+        0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+.membrane.beam-contact {
+    border-color: rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.9);
+    box-shadow: 
+        inset 0 0 30px rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.3),
+        0 0 20px rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.6);
+}
+
+/* Empty membranes - COMPLETELY DEAD */
+.membrane.empty {
+    opacity: 0.3;
+    cursor: default;
+    background: rgba(60, 60, 60, 0.02);
+    border-color: rgba(80, 80, 80, 0.15);
+    filter: grayscale(1);
+}
+
+.membrane.empty:hover {
+    transform: none;
+    background: rgba(60, 60, 60, 0.02);
+    border-color: rgba(80, 80, 80, 0.15);
+}
+
+.membrane.empty .membrane-code {
+    color: rgba(100, 100, 100, 0.4);
+    text-shadow: none;
+}
+
+/* MEMBRANE TEXT - BOLD */
+.membrane-code {
+    font-size: 11px;
+    font-weight: bold;
     letter-spacing: 2px;
-    font-size: 10px;
-    transition: all 0.3s;
-}
-
-.access-link:hover {
-    background: rgba(229, 62, 44, 0.1);
-    border-color: rgba(229, 62, 44, 0.8);
-    color: rgba(229, 62, 44, 1);
-    text-shadow: 0 0 10px currentColor;
-}
-
-.status-contained {
-    color: #E53E2C;
-}
-
-.footer {
+    text-transform: uppercase;
     text-align: center;
-    margin-top: 100px;
-    padding-top: 40px;
-    border-top: 1px solid rgba(229, 62, 44, 0.2);
-    font-size: 9px;
-    letter-spacing: 1px;
-    opacity: 0.4;
+    color: rgb(var(--text-r), var(--text-g), var(--text-b));
+    text-shadow: 
+        0 0 4px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.6);
+    width: 100%;
 }
 
+/* POPUP OVERLAY */
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: transparent;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    animation: fade-in 0.3s ease;
+}
+
+.popup-overlay.active {
+    display: flex;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.popup-container {
+    background: rgba(var(--popup-bg-r), var(--popup-bg-g), var(--popup-bg-b), 0.25);
+    backdrop-filter: blur(25px) saturate(1.2);
+    border: 1px solid rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.6);
+    box-shadow: 
+        0 0 60px rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.2),
+        inset 0 0 50px rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.05);
+    border-radius: 8px;
+    padding: 40px;
+    max-width: 520px;
+    width: 90%;
+    font-family: 'Courier New', monospace;
+    animation: popup-appear 0.3s ease;
+    text-align: center;
+}
+
+@keyframes popup-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.popup-title {
+    font-size: 13px;
+    color: rgb(var(--popup-text-r), var(--popup-text-g), var(--popup-text-b));
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+    text-shadow: 
+        0 0 8px rgba(var(--popup-glow-r), var(--popup-glow-g), var(--popup-glow-b), 0.8),
+        0 0 16px rgba(var(--popup-glow-r), var(--popup-glow-g), var(--popup-glow-b), 0.5),
+        0 0 32px rgba(var(--popup-glow-r), var(--popup-glow-g), var(--popup-glow-b), 0.3);
+    animation: title-flicker 0.3s infinite;
+    filter: blur(var(--text-title-blur));
+}
+
+.popup-content {
+    color: rgba(var(--popup-text-r), var(--popup-text-g), var(--popup-text-b), 0.85);
+    font-size: 12px;
+    line-height: 1.8;
+    margin-bottom: 25px;
+    filter: blur(var(--text-body-blur));
+}
+
+.popup-field {
+    margin-bottom: 15px;
+}
+
+.popup-label {
+    color: rgba(var(--popup-label-r), var(--popup-label-g), var(--popup-label-b), 0.7);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    filter: blur(var(--text-body-blur));
+}
+
+.popup-value {
+    color: rgba(var(--popup-text-r), var(--popup-text-g), var(--popup-text-b), 0.95);
+    font-size: 13px;
+    letter-spacing: 1px;
+    filter: blur(var(--text-body-blur));
+}
+
+.popup-description {
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.3);
+    border-radius: 4px;
+    text-align: left;
+    line-height: 1.9;
+    filter: blur(var(--text-body-blur));
+}
+
+.popup-warning {
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.12);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.4);
+    border-radius: 4px;
+    color: rgba(var(--popup-text-r), var(--popup-text-g), var(--popup-text-b), 0.9);
+    text-align: left;
+    line-height: 1.9;
+    filter: blur(var(--text-body-blur));
+}
+
+.password-note {
+    margin: 25px 0;
+    padding: 15px;
+    background: rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.08);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.3);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 10px;
+    color: rgba(var(--popup-text-r), var(--popup-text-g), var(--popup-text-b), 0.8);
+    letter-spacing: 1px;
+    filter: blur(var(--text-body-blur));
+}
+
+.popup-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.popup-button {
+    padding: 12px 30px;
+    background: rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.15);
+    border: 1px solid rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.5);
+    color: rgb(var(--popup-text-r), var(--popup-text-g), var(--popup-text-b));
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: crosshair;
+    transition: all 0.3s;
+    font-family: 'Courier New', monospace;
+    border-radius: 3px;
+    filter: blur(var(--text-body-blur));
+}
+
+.popup-button:hover {
+    background: rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.3);
+    box-shadow: 0 0 20px rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.4);
+    transform: translateY(-1px);
+}
+
+/* PASSWORD FLASH - Ocean specimen notification (LEAK-WORM style) */
+.password-flash {
+    /* EXACT CENTER POSITIONING */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* TYPOGRAPHY */
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    
+    /* OCEAN COLORS - Deep ocean blue with cyan glow */
+    color: rgb(220, 240, 255);
+    text-shadow: 
+        0 0 10px rgba(0, 200, 255, 1.0),
+        0 0 20px rgba(0, 200, 255, 0.8),
+        0 0 40px rgba(0, 200, 255, 0.5);
+    
+    /* BEHAVIOR */
+    z-index: 500;
+    display: none;
+    opacity: 0;
+    animation: message-flicker 0.15s infinite;
+    pointer-events: none;
+    
+    /* CONTAINER BOX */
+    padding: 20px 35px;
+    background: rgba(0, 30, 50, 0.95);
+    border: 1px solid rgba(0, 200, 255, 0.6);
+    border-radius: 3px;
+    box-shadow: 
+        0 0 30px rgba(0, 100, 150, 0.5),
+        inset 0 0 20px rgba(0, 200, 255, 0.1);
+    
+    /* RESPONSIVE */
+    max-width: 85vw;
+    line-height: 1.5;
+}
+
+@keyframes message-flicker {
+    0%, 100% { opacity: 1; }
+    10% { opacity: 0.85; }
+    20% { opacity: 1; }
+    50% { opacity: 0.92; }
+    60% { opacity: 1; }
+}
+
+.password-flash-text {
+    /* Text inherits styling from parent */
+}
+
+/* BEAM INTERACTIONS */
+.archive-title.beam-approaching,
+.archive-subtitle.beam-approaching,
+.date-tag.beam-approaching {
+    opacity: 1;
+    filter: brightness(1.1);
+    transition: all 0.15s ease-out;
+}
+
+.archive-title.beam-contact {
+    filter: blur(0px) brightness(1.5) !important;
+    text-shadow: 
+        0 0 12px rgba(var(--title-r), var(--title-g), var(--title-b), 1.0),
+        0 0 24px rgba(var(--title-r), var(--title-g), var(--title-b), 0.9),
+        0 0 48px rgba(var(--title-r), var(--title-g), var(--title-b), 0.7) !important;
+    transition: all 0.08s ease-out;
+}
+
+.archive-subtitle.beam-contact,
+.date-tag.beam-contact {
+    filter: blur(0px) brightness(1.4) !important;
+    text-shadow: 
+        0 0 10px rgba(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b), 1.0),
+        0 0 20px rgba(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b), 0.8),
+        0 0 40px rgba(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b), 0.6) !important;
+    transition: all 0.08s ease-out;
+}
+
+.popup-title.beam-approaching,
+.popup-label.beam-approaching,
+.popup-value.beam-approaching,
+.popup-button.beam-approaching,
+.popup-description.beam-approaching,
+.popup-warning.beam-approaching,
+.password-note.beam-approaching {
+    opacity: 1;
+    filter: brightness(1.1);
+    transition: all 0.15s ease-out;
+}
+
+.popup-title.beam-contact,
+.popup-label.beam-contact,
+.popup-value.beam-contact,
+.popup-button.beam-contact {
+    filter: blur(0px) brightness(1.4) !important;
+    text-shadow: 
+        0 0 10px rgba(var(--popup-glow-r), var(--popup-glow-g), var(--popup-glow-b), 1.0),
+        0 0 20px rgba(var(--popup-glow-r), var(--popup-glow-g), var(--popup-glow-b), 0.9),
+        0 0 40px rgba(var(--popup-glow-r), var(--popup-glow-g), var(--popup-glow-b), 0.7) !important;
+    transition: all 0.08s ease-out;
+}
+
+.popup-description.beam-contact,
+.popup-warning.beam-contact,
+.password-note.beam-contact {
+    filter: blur(0px) brightness(1.25) !important;
+    border-color: rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.8) !important;
+    box-shadow: 0 0 20px rgba(var(--popup-border-r), var(--popup-border-g), var(--popup-border-b), 0.4) !important;
+    transition: all 0.08s ease-out;
+}
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
-    body {
-        padding: 40px 20px;
+    .membrane-grid {
+        gap: 15px;
+        padding: 0 20px;
     }
     
-    .meta-row {
-        grid-template-columns: 1fr;
-        gap: 5px;
+    .membrane {
+        min-height: 70px;
+        max-height: 90px;
+        padding: 6px 8px;
     }
     
-    .specimen-entry {
-        padding: 20px;
+    .membrane-code {
+        font-size: 9px;
+        letter-spacing: 1px;
     }
+
+    .tank-header {
+        padding: 0 20px 30px 20px;
+    }
+    
+    .tank-footer {
+        padding: 30px 20px 0 20px;
+    }
+    
+    .archive-title {
+        font-size: 20px;
+        letter-spacing: 3px;
+    }
+    
+    .archive-subtitle {
+        font-size: 11px;
+    }
+    
+    .date-tag {
+        font-size: 9px;
+    }
+    
+    .popup-container {
+        padding: 25px;
+    }
+    
+    .password-flash {
+        padding: 20px 30px;
+    }
+    
+    .password-flash-text {
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
+}
+
+/* BEAM SYSTEM */
+.beam-system {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    pointer-events: none;
+}
+
+.beam-body {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    left: 0;
+    background: linear-gradient(to right,
+        transparent 0%,
+        rgba(var(--beam-color-r), var(--beam-color-g), var(--beam-color-b), 0.03) 10%,
+        rgba(var(--beam-color-r), var(--beam-color-g), var(--beam-color-b), 0.06) 50%,
+        rgba(var(--beam-color-r), var(--beam-color-g), var(--beam-color-b), 0.03) 90%,
+        transparent 100%
+    );
+    animation: beam-scan var(--beam-speed) linear infinite;
+}
+
+.beam-glow {
+    position: absolute;
+    width: 100%;
+    height: 12px;
+    left: 0;
+    transform: translateY(-5px);
+    background: linear-gradient(to right,
+        transparent 20%,
+        rgba(var(--beam-color-r), var(--beam-color-g), var(--beam-color-b), 0.04) 50%,
+        transparent 80%
+    );
+    filter: blur(4px);
+    animation: beam-scan var(--beam-speed) linear infinite;
+    opacity: 0.15;
+    transition: opacity 0.1s, filter 0.1s;
+}
+
+.beam-glow.approaching {
+    opacity: 0.25;
+    filter: blur(6px) brightness(1.2);
+}
+
+.beam-hotspot {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left: 0;
+    animation: beam-scan var(--beam-speed) linear infinite;
+    opacity: 0.1;
+    transition: opacity 0.05s;
+}
+
+.beam-hotspot.active {
+    opacity: 0.3;
+}
+
+@keyframes beam-scan {
+    from { 
+        top: var(--beam-start-position);
+        opacity: 0;
+    }
+    2% { opacity: 1; }
+    98% { opacity: 1; }
+    to { 
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+/* PARTICLES */
+.particle-container {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle-field {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(var(--glow-r), var(--glow-g), var(--glow-b), 1.0);
+    opacity: calc(var(--particle-base-opacity) * var(--particle-decay-multiplier));
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    transition: opacity 0.3s ease-out;
+    box-shadow: 0 0 2px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.3);
+    min-width: 1.5px;
+    min-height: 1.5px;
+    animation: drift-up linear infinite;
+}
+
+@keyframes drift-up {
+    from { transform: translateY(110vh); }
+    to { transform: translateY(-10vh); }
+}
+
+.particle[data-layer="far"] { z-index: 1; }
+.particle[data-layer="mid"] { z-index: 2; }
+.particle[data-layer="near"] { z-index: 3; }
+
+.particle.beam-revealed {
+    opacity: calc(var(--particle-base-opacity) * 3.5 * var(--particle-decay-multiplier)) !important;
 }
 </style>
 </head>
 <body>
 
-<div class="archive-header">
-    <div class="archive-title">LOOKAWAY ARCHIVE</div>
-    <div class="archive-subtitle">Specimen Containment & Documentation Facility</div>
-</div>
-
-<div class="specimens-container">
-    
-    <!-- SPECIMEN 001 -->
-    <div class="specimen-entry">
-        <div class="specimen-code">SPECIMEN: LEAK-WORM-847T</div>
-        
-        <div class="specimen-meta">
-            <div class="meta-row">
-                <span class="meta-label">Deployed:</span>
-                <span class="meta-value">October 08, 2025</span>
-            </div>
-            <div class="meta-row">
-                <span class="meta-label">Classification:</span>
-                <span class="meta-value">Interactive Narrative Specimen</span>
-            </div>
-            <div class="meta-row">
-                <span class="meta-label">Function:</span>
-                <span class="meta-value">Explores quantum measurement paradox through Tlönian archaeological lens</span>
-            </div>
-            <div class="meta-row">
-                <span class="meta-label">Mechanism:</span>
-                <span class="meta-value">JavaScript organism with decay lifecycle, electron beam collision, particle drift</span>
-            </div>
-            <div class="meta-row">
-                <span class="meta-label">Tools:</span>
-                <span class="meta-value">Vanilla JS, CSS Variables, Web Audio API</span>
-            </div>
-            <div class="meta-row">
-                <span class="meta-label">Status:</span>
-                <span class="meta-value status-contained">● CONTAINED</span>
-            </div>
-        </div>
-        
-        <div class="specimen-description">
-            Archived documentation from the Parallax Archive detailing Earth's century-long "measurement problem" in quantum mechanics. The specimen exhibits temporal decay behaviors and responds to user interaction through a CRT-simulated display environment.
-        </div>
-        
-        <a href="/leak-worm-847t/" class="access-link">ACCESS SPECIMEN →</a>
+<div class="crt">
+    <div class="tank-header">
+        <div class="archive-title">LOOKAWAY ARCHIVE</div>
+        <div class="archive-subtitle">Specimen Containment Facility</div>
     </div>
     
-    <!-- Future specimens will be added here -->
+    <div class="membrane-grid" id="membraneGrid"></div>
     
+    <div class="tank-footer">
+        <div class="date-tag" id="dateTag"></div>
+    </div>
+    
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-container">
+            <div class="popup-title" id="popupTitle">SPECIMEN CONTAINMENT PROTOCOL</div>
+            <div class="popup-content" id="popupContent"></div>
+            <div class="popup-buttons">
+                <button class="popup-button" id="observeBtn">OBSERVE SPECIMEN</button>
+                <button class="popup-button" id="retrievePasswordBtn" style="display:none;">RETRIEVE PASSWORD</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="footer">
-    LOOKAWAY ARCHIVE © 2025 — SPECIMEN PRESERVATION PROTOCOL v1.0
+<div class="vignette"></div>
+<div class="scanlines"></div>
+
+<div class="password-flash" id="passwordFlash">
+    <div class="password-flash-text">PASSWORD LEAKED TO CLIPBOARD</div>
 </div>
+
+<script src="tank-config.js"></script>
+<script src="tank-specimens.js"></script>
+<script src="tank-decay.js"></script>
+<script src="tank-beam.js"></script>
+<script src="tank-particles.js"></script>
+<script src="tank-audio.js"></script>
+
+<script>
+const tank = {
+    currentPopup: null,
+    initialized: false
+};
+
+function generateMembraneGrid() {
+    const grid = document.getElementById('membraneGrid');
+    
+    SPECIMENS.registry.forEach(specimen => {
+        const membrane = document.createElement('div');
+        membrane.className = 'membrane';
+        membrane.dataset.specimenId = specimen.id;
+        
+        if (specimen.status === 'contained') {
+            membrane.classList.add('active');
+            
+            // ✅ APPLY SPECIMEN COLOR (Data-Driven)
+            if (specimen.color) {
+                const { r, g, b } = specimen.color;
+                membrane.style.setProperty('--specimen-r', r);
+                membrane.style.setProperty('--specimen-g', g);
+                membrane.style.setProperty('--specimen-b', b);
+                membrane.classList.add('has-specimen');
+            }
+            
+            // ✅ APPLY BEHAVIORS (Data-Driven)
+            if (specimen.behaviors) {
+                // Idle animation
+                if (specimen.behaviors.idleAnimation && specimen.behaviors.idleAnimation !== 'none') {
+                    membrane.classList.add(`anim-${specimen.behaviors.idleAnimation}`);
+                    if (specimen.behaviors.animationSpeed) {
+                        membrane.style.setProperty('--anim-speed', `${specimen.behaviors.animationSpeed}s`);
+                    }
+                }
+                
+                // Hover effect class (for future hover customization)
+                if (specimen.behaviors.hoverEffect) {
+                    membrane.classList.add(`hover-${specimen.behaviors.hoverEffect}`);
+                }
+            }
+            
+            // Add classification-based class (for future styling)
+            if (specimen.classification) {
+                const classSlug = specimen.classification.toLowerCase().replace(/\s+/g, '-');
+                membrane.classList.add(`class-${classSlug}`);
+            }
+            
+        } else {
+            membrane.classList.add('empty');
+        }
+        
+        membrane.innerHTML = `<div class="membrane-code">${specimen.code}</div>`;
+        
+        if (specimen.status === 'contained') {
+            membrane.addEventListener('click', () => {
+                openPopup(specimen.id);
+            });
+        }
+        
+        grid.appendChild(membrane);
+    });
+    
+    console.log('✅ Membranes generated (data-driven colors & behaviors)');
+}
+
+function openPopup(specimenId) {
+    const popupData = SPECIMENS.getPopupContent(specimenId);
+    if (!popupData) return;
+    
+    tank.currentPopup = specimenId;
+    
+    const overlay = document.getElementById('popupOverlay');
+    const title = document.getElementById('popupTitle');
+    const content = document.getElementById('popupContent');
+    const observeBtn = document.getElementById('observeBtn');
+    const retrievePasswordBtn = document.getElementById('retrievePasswordBtn');
+    
+    title.textContent = popupData.title;
+    
+    content.innerHTML = `
+        <div class="popup-field">
+            <div class="popup-label">Designation</div>
+            <div class="popup-value">${popupData.code}</div>
+        </div>
+        <div class="popup-field">
+            <div class="popup-label">Status</div>
+            <div class="popup-value">${popupData.status}</div>
+        </div>
+        <div class="popup-field">
+            <div class="popup-label">Classification</div>
+            <div class="popup-value">${popupData.classification}</div>
+        </div>
+        <div class="popup-field">
+            <div class="popup-label">Deployed</div>
+            <div class="popup-value">${popupData.deployed}</div>
+        </div>
+        <div class="popup-description">
+            ${popupData.description}
+        </div>
+        <div class="popup-warning">
+            <strong>⚠ WARNING:</strong> ${popupData.warning}
+        </div>
+        ${popupData.password ? `
+        <div class="password-note">
+            ⚠ ACCESS PASSWORD REQUIRED FOR SPECIMEN OBSERVATION
+        </div>
+        ` : ''}
+    `;
+    
+    observeBtn.onclick = () => {
+        if (popupData.url) {
+            // Trigger membrane click sound first
+            if (window.tankAudio) {
+                window.tankAudio.triggerMembraneClick();
+            }
+            
+            // Create fade-to-black overlay
+            const fadeOverlay = document.createElement('div');
+            fadeOverlay.style.cssText = `
+                position: fixed;
+                inset: 0;
+                background: black;
+                opacity: 0;
+                z-index: 10000;
+                pointer-events: none;
+                transition: opacity 0.6s ease-out;
+            `;
+            document.body.appendChild(fadeOverlay);
+            
+            // Start fade
+            setTimeout(() => {
+                fadeOverlay.style.opacity = '1';
+            }, 10);
+            
+            // Navigate after fade completes
+            setTimeout(() => {
+                window.location.href = popupData.url;
+            }, 700);
+        }
+    };
+    
+    if (popupData.password) {
+        retrievePasswordBtn.style.display = 'inline-block';
+        retrievePasswordBtn.onclick = () => {
+            leakSpecimenData(popupData.code, popupData.password, popupData.url);
+        };
+    } else {
+        retrievePasswordBtn.style.display = 'none';
+    }
+    
+    overlay.classList.add('active');
+}
+
+function closePopup() {
+    const overlay = document.getElementById('popupOverlay');
+    overlay.classList.remove('active');
+    tank.currentPopup = null;
+}
+
+function showPasswordFlash() {
+    const flash = document.getElementById('passwordFlash');
+    flash.style.display = 'block';
+    setTimeout(() => flash.style.opacity = '1', 10);
+    setTimeout(() => {
+        flash.style.opacity = '0';
+        setTimeout(() => flash.style.display = 'none', 300);
+    }, 2000); // Shows for 2 seconds
+}
+
+function leakSpecimenData(code, password, url) {
+    // Copy ONLY the password - just the equation
+    navigator.clipboard.writeText(password).then(() => {
+        showPasswordFlash();
+    }).catch(err => {
+        console.error('Leak failed:', err);
+        alert('Failed to copy password to clipboard');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof TANK_CONFIG === 'undefined') {
+        console.error('❌ tank-config.js not loaded!');
+        return;
+    }
+    if (typeof SPECIMENS === 'undefined') {
+        console.error('❌ tank-specimens.js not loaded!');
+        return;
+    }
+    if (typeof tankDecay === 'undefined') {
+        console.error('❌ tank-decay.js not loaded!');
+        return;
+    }
+    
+    console.log('📋 Initializing Hunterian Tank...');
+    
+    const dateTag = document.getElementById('dateTag');
+    const now = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    dateTag.textContent = `Archive Access: ${now.toLocaleDateString('en-US', options)}`;
+    
+    generateMembraneGrid();
+    tankDecay.start();
+    
+    if (typeof TankBeamModule !== 'undefined') {
+        window.tankBeam = new TankBeamModule();
+        window.tankBeam.init();
+    }
+    
+    if (typeof TankParticleDrift !== 'undefined') {
+        window.tankParticles = new TankParticleDrift();
+        window.tankParticles.init();
+    }
+    
+    document.getElementById('popupOverlay').addEventListener('click', (e) => {
+        if (e.target.id === 'popupOverlay') {
+            closePopup();
+        }
+    });
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && tank.currentPopup) {
+            closePopup();
+        }
+    });
+    
+    const resetFlicker = () => tankDecay.reset();
+    document.addEventListener('scroll', resetFlicker);
+    document.addEventListener('mousemove', resetFlicker);
+    document.addEventListener('click', resetFlicker);
+    document.addEventListener('touchstart', resetFlicker);
+    document.addEventListener('keydown', resetFlicker);
+    
+    tank.initialized = true;
+    console.log('✅ Hunterian Tank operational (WARM PALETTE + DATA-DRIVEN + AUDIO)');
+    console.log('🧬 Specimen colors applied:', SPECIMENS.countActive(), 'active');
+    console.log('🎭 Behaviors loaded from specimen data');
+});
+</script>
 
 </body>
 </html>
