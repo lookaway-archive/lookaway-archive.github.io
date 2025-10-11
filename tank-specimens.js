@@ -5,7 +5,7 @@
  * RETRIEVAL: October 2025, Lookaway Archive
  * ============================================
  * 
- * STATUS: Operational - FULLY DATA-DRIVEN v2.0
+ * STATUS: Operational - ELECTRIC AMBER v3.0
  * FUNCTION: Specimen catalog - tracks all contained organisms
  * DEPENDENCIES: None (pure data structure)
  * 
@@ -15,6 +15,10 @@
  * entry includes identification, containment status, deployment
  * metadata, access password, visual parameters (NOW USED!),
  * and behavior configurations.
+ * 
+ * Updated to ELECTRIC AMBER palette - specimens glow with hot
+ * yellow-amber instead of orange flesh tones, matching the new
+ * energetic preservation fluid aesthetic.
  * 
  * ARCHITECTURE UPDATE:
  * All visual styling and animations now pulled from specimen data.
@@ -55,8 +59,8 @@ const SPECIMENS = {
       // ACCESS PASSWORD
       password: "{🌊:🌊∈🌊}",
       
-      // VISUAL PARAMETERS - Now actually used!
-      color: { r: 255, g: 120, b: 70 },  // Orange/flesh tone
+      // VISUAL PARAMETERS - Electric amber to match tank
+      color: { r: 200, g: 165, b: 70 },  // Bright electric yellow-amber
       
       // BEHAVIOR CONFIGURATION - Defines animations & interactions
       behaviors: {
@@ -68,7 +72,7 @@ const SPECIMENS = {
       },
       
       // NAVIGATION
-      url: "https://lookaway-archive.github.io/leak-worm-847t/",
+      url: "/leak-worm-847t/",
       
       // PREVIEW CONFIGURATION - For future organism rendering
       preview: {
@@ -236,4 +240,4 @@ if (typeof window !== 'undefined') {
   window.SPECIMENS = SPECIMENS;
 }
 
-console.log('✓ tank-specimens.js loaded - Registry active (1 contained, 11 vacant, FULLY DATA-DRIVEN)');
+console.log('✔ tank-specimens.js loaded - Registry active (1 contained, 11 vacant, ELECTRIC AMBER)');

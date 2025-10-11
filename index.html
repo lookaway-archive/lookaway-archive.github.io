@@ -1,35 +1,64 @@
 <!DOCTYPE html>
+<!--
+============================================
+SPECIMEN: HUNTERIAN TANK - MAIN INTERFACE
+ORGAN: Visual Containment System
+RETRIEVAL: October 2025, Lookaway Archive
+============================================
+
+STATUS: Operational - HOT AMBER PALETTE v3.0
+FUNCTION: Primary specimen archive interface
+DEPENDENCIES: 
+  - tank-config.js (configuration constants)
+  - tank-specimens.js (specimen registry)
+  - tank-decay.js (lifecycle controller)
+  - tank-beam.js (electron scanning)
+  - tank-particles.js (atmospheric drift)
+  - tank-audio.js (sound system)
+
+SURGICAL NOTES:
+Main entry point for the Lookaway Tank preservation system.
+Features hot electric amber aesthetic with energetic center
+(120, 100, 45) radiating through rich glow (180, 160, 90).
+Includes live 24-hour clock, specimen grid with flicker
+animation, and fade-to-black navigation transitions.
+
+Data-driven architecture - specimen colors and behaviors
+pulled from tank-specimens.js registry. Audio defaults to
+LOW volume on first interaction.
+============================================
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOOKAWAY ARCHIVE - Specimen Containment Facility</title>
+<title>LOOKAWAY TANK - Hunterian Preservation System</title>
 
 <style>
 /* ============================================
-   VISUAL CORTEX - Warm formaldehyde preservation system
+   VISUAL CORTEX - Hot electric amber preservation system
    ============================================ */
 
 :root {
-    /* Preservation fluid colors - WARM PALETTE */
-    --core-r: 70;
-    --core-g: 60;
-    --core-b: 35;
-    --glow-r: 150;
-    --glow-g: 130;
-    --glow-b: 70;
-    --text-r: 185;
-    --text-g: 140;
-    --text-b: 36;
+    /* Preservation fluid colors - HOT AMBER PALETTE */
+    --core-r: 120;
+    --core-g: 100;
+    --core-b: 45;
+    --glow-r: 180;
+    --glow-g: 160;
+    --glow-b: 90;
+    --text-r: 210;
+    --text-g: 170;
+    --text-b: 55;
     --text-opacity: 1.0;
     
     /* Title hierarchy */
-    --title-r: 185;
-    --title-g: 140;
-    --title-b: 36;
-    --subtitle-r: 118;
-    --subtitle-g: 77;
-    --subtitle-b: 10;
+    --title-r: 210;
+    --title-g: 170;
+    --title-b: 55;
+    --subtitle-r: 140;
+    --subtitle-g: 110;
+    --subtitle-b: 30;
     
     /* Decay flesh popup colors - WARM TONES */
     --popup-bg-r: 90;
@@ -41,26 +70,12 @@
     --popup-text-r: 220;
     --popup-text-g: 200;
     --popup-text-b: 170;
-    --popup-glow-r: 160;
-    --popup-glow-g: 140;
+    --popup-glow-r: 180;
+    --popup-glow-g: 160;
     --popup-glow-b: 90;
-    --popup-label-r: 140;
-    --popup-label-g: 120;
-    --popup-label-b: 80;
-    
-    /* Password flash - BRUISED PURPLE-BLUE (darker, more saturated blue) */
-    --flash-bg-r: 40;
-    --flash-bg-g: 25;
-    --flash-bg-b: 80;
-    --flash-border-r: 90;
-    --flash-border-g: 60;
-    --flash-border-b: 220;
-    --flash-text-r: 200;
-    --flash-text-g: 180;
-    --flash-text-b: 255;
-    --flash-glow-r: 110;
-    --flash-glow-g: 80;
-    --flash-glow-b: 240;
+    --popup-label-r: 160;
+    --popup-label-g: 130;
+    --popup-label-b: 70;
     
     /* Membrane colors - YELLOW GLASS */
     --membrane-r: 255;
@@ -68,9 +83,9 @@
     --membrane-b: 98;
     
     /* Beam parameters */
-    --beam-color-r: 150;
-    --beam-color-g: 130;
-    --beam-color-b: 70;
+    --beam-color-r: 180;
+    --beam-color-g: 160;
+    --beam-color-b: 90;
     --beam-speed: 12s;
     --beam-start-position: 0%;
     
@@ -428,17 +443,20 @@ body {
     text-shadow: none;
 }
 
-/* MEMBRANE TEXT - BOLD */
+/* MEMBRANE TEXT - BIGGER WITH FLICKER */
 .membrane-code {
-    font-size: 11px;
+    font-size: 14px;
     font-weight: bold;
     letter-spacing: 2px;
     text-transform: uppercase;
     text-align: center;
     color: rgb(var(--text-r), var(--text-g), var(--text-b));
     text-shadow: 
-        0 0 4px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.6);
+        0 0 6px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.8),
+        0 0 12px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.5);
     width: 100%;
+    animation: title-flicker var(--flicker-speed) infinite;
+    filter: blur(var(--text-title-blur));
 }
 
 /* POPUP OVERLAY */
@@ -729,7 +747,7 @@ body {
     }
     
     .membrane-code {
-        font-size: 9px;
+        font-size: 11px;
         letter-spacing: 1px;
     }
 
@@ -890,8 +908,8 @@ body {
 
 <div class="crt">
     <div class="tank-header">
-        <div class="archive-title">LOOKAWAY ARCHIVE</div>
-        <div class="archive-subtitle">Specimen Containment Facility</div>
+        <div class="archive-title">LOOKAWAY TANK</div>
+        <div class="archive-subtitle">Specimen Preservation System</div>
     </div>
     
     <div class="membrane-grid" id="membraneGrid"></div>
@@ -1123,9 +1141,25 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('📋 Initializing Hunterian Tank...');
     
     const dateTag = document.getElementById('dateTag');
-    const now = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    dateTag.textContent = `Archive Access: ${now.toLocaleDateString('en-US', options)}`;
+    
+    // Update date and time
+    function updateDateTime() {
+        const now = new Date();
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        const dateStr = now.toLocaleDateString('en-US', dateOptions);
+        
+        // 24-hour format
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const timeStr = `${hours}:${minutes}:${seconds}`;
+        
+        dateTag.textContent = `Tank Access: ${dateStr} — ${timeStr}`;
+    }
+    
+    // Initial update and start clock
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
     
     generateMembraneGrid();
     tankDecay.start();
@@ -1160,7 +1194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', resetFlicker);
     
     tank.initialized = true;
-    console.log('✅ Hunterian Tank operational (WARM PALETTE + DATA-DRIVEN + AUDIO)');
+    console.log('✅ Hunterian Tank operational (HOT AMBER + ELECTRIC)');
     console.log('🧬 Specimen colors applied:', SPECIMENS.countActive(), 'active');
     console.log('🎭 Behaviors loaded from specimen data');
 });

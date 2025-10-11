@@ -5,17 +5,18 @@
  * RETRIEVAL: October 2025, Lookaway Archive
  * ============================================
  * 
- * STATUS: Operational - WARM PALETTE v2.0
+ * STATUS: Operational - HOT AMBER PALETTE v3.0
  * FUNCTION: Container nervous system constants - preservation parameters
  * DEPENDENCIES: None (primary organ, all others feed from this)
  * 
  * SURGICAL NOTES:
- * Updated from military green CRT to warm formaldehyde amber aesthetic.
- * Color palette shifted to evoke Hunterian Museum preservation jars:
- * nicotine-stained glass, oxidized flesh tones, yellowed specimen labels.
+ * Updated to HOT electric amber aesthetic - active preservation fluid
+ * with energetic center radiating warmth. Color palette shifted from
+ * stagnant formaldehyde to ALIVE electric amber: hot yellow-green center
+ * (120, 100, 45) radiating through rich amber glow (180, 160, 90).
  * 
- * Particle density increased for murky preservation fluid effect.
- * The tank exhibits indefinite preservation with periodic flicker events.
+ * Flicker state BOOSTED for more dramatic power surge events.
+ * Particles match new glow intensity for cohesive atmosphere.
  * ============================================
  */
 
@@ -36,51 +37,50 @@ const TANK_CONFIG = {
   },
   
   // ==========================================
-  // CHROMATIC GENETICS - Preservation fluid spectra
-  // (Technical: RGB color values for warm amber-brown system)
+  // CHROMATIC GENETICS - HOT AMBER PRESERVATION FLUID
+  // (Technical: RGB color values for electric amber system)
   // ==========================================
   
   colors: {
-    // PRESERVATION STATE - Nicotine glass / formaldehyde amber
+    // PRESERVATION STATE - HOT electric amber
     preservation: {
-      core: { r: 70, g: 60, b: 35 },       // Dark amber-brown base
-      glow: { r: 150, g: 130, b: 70 },     // Warm amber glow
-      text: { r: 185, g: 140, b: 36 },     // Golden amber phosphor (title/tag)
+      core: { r: 120, g: 100, b: 45 },     // HOT yellow-green center
+      glow: { r: 180, g: 160, b: 90 },     // Rich amber glow
+      text: { r: 210, g: 170, b: 55 },     // Bright golden phosphor
       textOpacity: 1.0                      // Full visibility
     },
     
-    // FLICKER STATE - Momentary power drop
+    // FLICKER STATE - BOOSTED power surge
     flicker: {
-      core: { r: 60, g: 50, b: 30 },       // Darker momentarily
-      glow: { r: 130, g: 110, b: 60 },     // Dimmed glow
-      text: { r: 165, g: 120, b: 30 },     // Reduced brightness
-      textOpacity: 0.9                      // Slight fade
+      core: { r: 140, g: 115, b: 55 },     // BRIGHTER surge
+      glow: { r: 200, g: 175, b: 100 },    // Intensified glow
+      text: { r: 230, g: 185, b: 70 },     // Brighter text
+      textOpacity: 0.95                     // Nearly full
     },
     
-    // SUBTITLE - Darker brown for hierarchy
-    subtitle: { r: 118, g: 77, b: 10 },
+    // SUBTITLE - Darker for hierarchy
+    subtitle: { r: 140, g: 110, b: 30 },
     
-    // POPUP SYSTEM - Preserved tissue aesthetic
-    // (Technical: Warm peachy-brown decay flesh tones)
+    // POPUP SYSTEM - Match new glow
     popup: {
-      container: { r: 90, g: 75, b: 50 },    // Peachy-brown flesh base
-      border: { r: 180, g: 150, b: 100 },    // Aged flesh edge
-      text: { r: 220, g: 200, b: 170 },      // Off-white decay flesh
-      glow: { r: 160, g: 140, b: 90 },       // Subtle amber glow
-      label: { r: 140, g: 120, b: 80 }       // Dim brown-amber
+      container: { r: 90, g: 75, b: 50 },     // Keep warm base
+      border: { r: 180, g: 150, b: 100 },     // Keep aged edge
+      text: { r: 220, g: 200, b: 170 },       // Keep off-white
+      glow: { r: 180, g: 160, b: 90 },        // Match new glow
+      label: { r: 160, g: 130, b: 70 }        // Warmer labels
     },
     
     // BACKGROUND - Deep black
     background: { r: 0, g: 0, b: 0 },
     
-    // AMBIENT GLOW - Overall atmosphere
-    ambientGlow: { r: 150, g: 130, b: 70 },
+    // AMBIENT GLOW - Match new richness
+    ambientGlow: { r: 180, g: 160, b: 90 },
     
-    // BEAM COLOR - Scanning electron beam (amber)
-    beam: { r: 150, g: 130, b: 70 },
+    // BEAM COLOR - Match new amber
+    beam: { r: 180, g: 160, b: 90 },
     
-    // PARTICLE COLOR - Suspended tissue fragments
-    particle: { r: 170, g: 150, b: 90 }
+    // PARTICLE COLOR - Match new glow
+    particle: { r: 190, g: 165, b: 95 }
   },
   
   // ==========================================
@@ -135,14 +135,14 @@ const TANK_CONFIG = {
   
   particles: {
     // LAYER COUNTS - More visible murky fluid
-    far: 40,             // Background layer (was 25)
-    mid: 30,             // Midground layer (was 18)
-    near: 12,            // Foreground layer (was 7)
+    far: 40,             // Background layer
+    mid: 30,             // Midground layer
+    near: 12,            // Foreground layer
     
     // VISIBILITY - More visible suspended material
-    baseOpacity: 0.12,   // 2x more visible (was 0.06)
+    baseOpacity: 0.12,   // 2x more visible
     
-    // DRIFT SPEEDS - Keep same as leak-worm
+    // DRIFT SPEEDS - Slow viscous movement
     speeds: {
       far: 60,           // Slowest
       mid: 35,           // Medium
@@ -339,4 +339,4 @@ if (typeof window !== 'undefined') {
   window.TANK_CONFIG = TANK_CONFIG;
 }
 
-console.log('✓ tank-config.js loaded - Hunterian Tank configuration active (WARM PALETTE)');
+console.log('✔ tank-config.js loaded - Hunterian Tank configuration active (HOT AMBER PALETTE v3.0)');
