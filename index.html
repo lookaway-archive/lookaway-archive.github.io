@@ -469,6 +469,8 @@ body {
     justify-content: center;
     z-index: 3;
     animation: fade-in 0.3s ease;
+    overflow-y: auto; /* Allow scrolling if needed */
+    padding: 20px 0; /* Padding for mobile */
 }
 
 .popup-overlay.active {
@@ -734,16 +736,38 @@ body {
 }
 
 /* RESPONSIVE */
+@media (max-width: 1024px) and (min-width: 769px) {
+    /* TABLET: 2-column grid */
+    .membrane-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        justify-items: center; /* Center items within grid */
+        max-width: 600px; /* Constrain width for better centering */
+        margin: 0 auto; /* Center the grid container itself */
+    }
+    
+    .membrane {
+        width: 100%; /* Full width of grid column */
+        max-width: 280px; /* But not too wide */
+    }
+}
+
 @media (max-width: 768px) {
     .membrane-grid {
+        grid-template-columns: 1fr; /* Force single column on mobile */
         gap: 15px;
         padding: 0 20px;
+        justify-items: center; /* Center items within grid */
+        max-width: 400px; /* Constrain width for better centering */
+        margin: 0 auto; /* Center the grid container itself */
     }
     
     .membrane {
         min-height: 70px;
         max-height: 90px;
         padding: 6px 8px;
+        width: 100%; /* Full width of grid column */
+        max-width: 360px; /* But not too wide */
     }
     
     .membrane-code {
@@ -772,16 +796,54 @@ body {
         font-size: 9px;
     }
     
+    /* MOBILE POPUP FIXES - Make scrollable */
     .popup-container {
-        padding: 25px;
+        padding: 20px;
+        max-height: 85vh; /* Don't exceed viewport */
+        overflow-y: auto; /* Enable scrolling */
+        -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
+    }
+    
+    .popup-title {
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .popup-content {
+        font-size: 11px;
+        margin-bottom: 20px;
+    }
+    
+    .popup-field {
+        margin-bottom: 12px;
+    }
+    
+    .popup-description,
+    .popup-warning,
+    .password-note {
+        padding: 15px;
+        margin: 20px 0;
+        font-size: 11px;
+    }
+    
+    .popup-buttons {
+        margin-top: 20px;
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 10px;
+    }
+    
+    .popup-button {
+        width: 100%; /* Full width buttons */
+        padding: 12px 20px;
     }
     
     .password-flash {
-        padding: 20px 30px;
+        padding: 15px 25px;
+        max-width: 90vw;
     }
     
     .password-flash-text {
-        font-size: 12px;
+        font-size: 11px;
         letter-spacing: 2px;
     }
 }
@@ -909,7 +971,7 @@ body {
 <div class="crt">
     <div class="tank-header">
         <div class="archive-title">LOOKAWAY TANK</div>
-        <div class="archive-subtitle">Specimen Preservation System</div>
+        <div class="archive-subtitle">Hunterian Preservation System</div>
     </div>
     
     <div class="membrane-grid" id="membraneGrid"></div>
