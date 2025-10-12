@@ -141,8 +141,16 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Start at top, not center */
     padding: 40px 0;
+    min-height: 100vh; /* Ensure scrolling works */
+}
+
+/* Center content when viewport is tall enough */
+@media (min-height: 900px) {
+    .crt {
+        justify-content: center; /* Only center on tall screens */
+    }
 }
 
 .crt::before {
@@ -738,6 +746,11 @@ body {
 /* RESPONSIVE */
 @media (max-width: 1024px) and (min-width: 769px) {
     /* TABLET: 2-column grid */
+    .crt {
+        justify-content: flex-start; /* Start at top on tablet */
+        padding: 30px 0;
+    }
+    
     .membrane-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
@@ -753,6 +766,12 @@ body {
 }
 
 @media (max-width: 768px) {
+    /* Ensure proper scrolling on mobile */
+    .crt {
+        justify-content: flex-start; /* Always start at top on mobile */
+        padding: 20px 0; /* Reduced padding for mobile */
+    }
+    
     .membrane-grid {
         grid-template-columns: 1fr; /* Force single column on mobile */
         gap: 15px;
