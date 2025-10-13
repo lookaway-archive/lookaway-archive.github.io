@@ -5,7 +5,7 @@
  * RETRIEVAL: October 2025, Lookaway Archive
  * ============================================
  * 
- * STATUS: Operational - v2.0 TITLE/DATE INTERACTION
+ * STATUS: Operational - v2.1 PASSWORD NOTE INTERACTION
  * FUNCTION: Container vision apparatus - electron beam scanning for membrane detection
  * DEPENDENCIES: tank-decay.js (lifecycle sync), tank-config.js (visual parameters)
  * 
@@ -19,7 +19,7 @@
  * - Active membranes (specimens)
  * - Title and subtitle text
  * - Date tag footer
- * - Popup text elements
+ * - Popup text elements (including password note)
  * 
  * Empty membranes are excluded - they are dead, no phosphor response.
  * ============================================
@@ -140,7 +140,8 @@ class TankBeamModule {
         '.archive-title, .archive-subtitle, ' +  // Header text
         '.date-tag, ' +                          // Footer date
         '.popup-title, .popup-label, .popup-value, ' +
-        '.popup-description, .popup-warning, .popup-button'
+        '.popup-description, .popup-warning, .popup-button, ' +
+        '.password-note'                         // Password message
       );
       
       let hitSomething = false;
@@ -262,4 +263,4 @@ if (typeof window !== 'undefined') {
   window.TankBeamModule = TankBeamModule;
 }
 
-console.log('✓ tank-beam.js loaded - Scanning system ready (title/date interaction enabled)');
+console.log('✔ tank-beam.js loaded - Scanning system ready (password note interaction enabled)');

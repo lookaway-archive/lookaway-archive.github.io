@@ -217,6 +217,37 @@ body {
     z-index: 4;
 }
 
+/* TANK BORDER - BRIGHT Glowing containment frame */
+.tank-border {
+    position: fixed;
+    inset: 8px; /* Distance from viewport edge */
+    border: 2px solid rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.8);
+    box-shadow: 
+        0 0 20px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.8),
+        0 0 40px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.5),
+        inset 0 0 20px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.4);
+    pointer-events: none;
+    z-index: 5;
+    animation: border-pulse 4s ease-in-out infinite;
+}
+
+@keyframes border-pulse {
+    0%, 100% {
+        opacity: 0.85;
+        box-shadow: 
+            0 0 20px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.8),
+            0 0 40px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.5),
+            inset 0 0 20px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.4);
+    }
+    50% {
+        opacity: 1.0;
+        box-shadow: 
+            0 0 30px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 1.0),
+            0 0 60px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.7),
+            inset 0 0 30px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.6);
+    }
+}
+
 /* TANK HEADER */
 .tank-header {
     text-align: center;
@@ -292,7 +323,7 @@ body {
     opacity: 0.8;
 }
 
-/* MEMBRANE BUTTONS */
+/* MEMBRANE BUTTONS - ROUNDED RECTANGLES */
 .membrane {
     position: relative;
     aspect-ratio: 7/3;
@@ -751,6 +782,12 @@ body {
         padding: 30px 0;
     }
     
+    /* Adjust border for tablet */
+    .tank-border {
+        inset: 6px;
+        border-radius: 10px;
+    }
+    
     .membrane-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
@@ -770,6 +807,12 @@ body {
     .crt {
         justify-content: flex-start; /* Always start at top on mobile */
         padding: 20px 0; /* Reduced padding for mobile */
+    }
+    
+    /* Tighter border on mobile with softer corners */
+    .tank-border {
+        inset: 4px; /* Closer to edge on mobile */
+        border-radius: 8px; /* Slightly tighter radius */
     }
     
     .membrane-grid {
@@ -1012,6 +1055,7 @@ body {
 </div>
 
 <div class="vignette"></div>
+<div class="tank-border"></div>
 <div class="scanlines"></div>
 
 <div class="password-flash" id="passwordFlash">
