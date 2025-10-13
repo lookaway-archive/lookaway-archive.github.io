@@ -1,6 +1,6 @@
 /**
  * ============================================
- * SPECIMEN: HUNTERIAN TANK
+ * SPECIMEN: LOOKAWAY TANK
  * ORGAN: SPECIMEN REGISTRY ARCHIVE
  * RETRIEVAL: October 2025, Lookaway Archive
  * ============================================
@@ -11,7 +11,7 @@
  * 
  * SURGICAL NOTES:
  * This archive contains the complete registry of all specimens
- * within the Hunterian Tank preservation system. Each specimen
+ * within the LOOKAWAY Tank preservation system. Each specimen
  * entry includes identification, containment status, deployment
  * metadata, access password, visual parameters (NOW USED!),
  * and behavior configurations.

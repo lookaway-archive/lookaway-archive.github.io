@@ -1,6 +1,6 @@
 /**
  * ============================================
- * HUNTERIAN TANK AUDIO MODULE v1.0
+ * LOOKAWAY TANK AUDIO MODULE v1.0
  * Adapted from: LEAK-WORM-847T audio DNA
  * Integration: tank-decay.js lifecycle
  * ============================================

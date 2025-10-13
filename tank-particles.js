@@ -1,6 +1,6 @@
 /**
  * ============================================
- * SPECIMEN: HUNTERIAN TANK
+ * SPECIMEN: LOOKAWAY TANK
  * ORGAN: ATMOSPHERIC DRIFT MECHANISM
  * RETRIEVAL: October 2025, Lookaway Archive
  * ============================================
