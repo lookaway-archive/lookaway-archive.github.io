@@ -7,7 +7,8 @@ RETRIEVAL: October 2025, Lookaway Archive
 ============================================
 
 STATUS: Operational - HOT AMBER PALETTE v3.0
-FUNCTION: Primary specimen archive interface
+FUNCTION: Primary specimen preservation interface
+OFFICIAL NAME: Lookaway Tank - Specimen Preservation System
 DEPENDENCIES: 
   - tank-config.js (configuration constants)
   - tank-specimens.js (specimen registry)
@@ -32,7 +33,7 @@ LOW volume on first interaction.
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOOKAWAY TANK - Specimen Preservation System</title>
+<title>Lookaway Tank - Specimen Preservation System</title>
 
 <style>
 /* ============================================
@@ -50,7 +51,6 @@ LOW volume on first interaction.
     --text-r: 210;
     --text-g: 170;
     --text-b: 55;
-    --text-opacity: 1.0;
     
     /* Title hierarchy */
     --title-r: 210;
@@ -60,7 +60,7 @@ LOW volume on first interaction.
     --subtitle-g: 110;
     --subtitle-b: 30;
     
-    /* Decay flesh popup colors - WARM TONES */
+    /* Popup colors - WARM TONES */
     --popup-bg-r: 90;
     --popup-bg-g: 75;
     --popup-bg-b: 50;
@@ -77,7 +77,7 @@ LOW volume on first interaction.
     --popup-label-g: 130;
     --popup-label-b: 70;
     
-    /* Membrane colors - YELLOW GLASS */
+    /* Membrane colors */
     --membrane-r: 255;
     --membrane-g: 224;
     --membrane-b: 98;
@@ -89,7 +89,7 @@ LOW volume on first interaction.
     --beam-speed: 12s;
     --beam-start-position: 0%;
     
-    /* Atmosphere - MORE VISIBLE */
+    /* Atmosphere */
     --particle-base-opacity: 0.12;
     --particle-decay-multiplier: 1.0;
     
@@ -107,8 +107,6 @@ LOW volume on first interaction.
     --scanline-speed: 3.0s;
     
     /* Text effects */
-    --text-glow-spread: 40px;
-    --text-glow-intensity: 0.3;
     --text-title-blur: 0.2px;
     --text-body-blur: 0.15px;
     
@@ -132,6 +130,20 @@ body {
     user-select: none;
 }
 
+/* Hide scrollbars */
+body::-webkit-scrollbar,
+.popup-container::-webkit-scrollbar,
+.popup-overlay::-webkit-scrollbar {
+    display: none;
+}
+
+body,
+.popup-container,
+.popup-overlay {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 /* CRT CONTAINER */
 .crt {
     position: fixed;
@@ -141,18 +153,28 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Start at top, not center */
-    padding: 40px 0;
-    min-height: 100vh; /* Ensure scrolling works */
+    justify-content: flex-start;
+    padding: 50px 20px;
+    min-height: 100vh;
 }
 
-/* Center content when viewport is tall enough */
-@media (min-height: 900px) {
+.crt::-webkit-scrollbar {
+    display: none;
+}
+
+.crt {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Center content on tall screens */
+@media (min-height: 1000px) {
     .crt {
-        justify-content: center; /* Only center on tall screens */
+        justify-content: center;
     }
 }
 
+/* Background glow */
 .crt::before {
     content: '';
     position: fixed;
@@ -204,10 +226,7 @@ body {
 /* VIGNETTE */
 .vignette {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: radial-gradient(
         circle at center,
         transparent var(--vignette-radius),
@@ -215,37 +234,6 @@ body {
     );
     pointer-events: none;
     z-index: 4;
-}
-
-/* TANK BORDER - BRIGHT Glowing containment frame */
-.tank-border {
-    position: fixed;
-    inset: 8px; /* Distance from viewport edge */
-    border: 2px solid rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.8);
-    box-shadow: 
-        0 0 20px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.8),
-        0 0 40px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.5),
-        inset 0 0 20px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.4);
-    pointer-events: none;
-    z-index: 5;
-    animation: border-pulse 4s ease-in-out infinite;
-}
-
-@keyframes border-pulse {
-    0%, 100% {
-        opacity: 0.85;
-        box-shadow: 
-            0 0 20px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.8),
-            0 0 40px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.5),
-            inset 0 0 20px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.4);
-    }
-    50% {
-        opacity: 1.0;
-        box-shadow: 
-            0 0 30px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 1.0),
-            0 0 60px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.7),
-            inset 0 0 30px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.6);
-    }
 }
 
 /* TANK HEADER */
@@ -321,9 +309,21 @@ body {
     text-shadow: 
         0 0 4px rgba(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b), 0.5);
     opacity: 0.8;
+    margin-bottom: 8px;
 }
 
-/* MEMBRANE BUTTONS - ROUNDED RECTANGLES */
+.tank-cycle {
+    font-size: 9px;
+    color: rgb(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b));
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 
+        0 0 3px rgba(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b), 0.4);
+    opacity: 0.6;
+    font-family: 'Courier New', monospace;
+}
+
+/* MEMBRANE BUTTONS */
 .membrane {
     position: relative;
     aspect-ratio: 7/3;
@@ -333,22 +333,18 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    /* Default fallback - will be overridden by specimen color */
     background: rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.05);
     backdrop-filter: blur(10px) saturate(1.2);
     border: 1px solid rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.3);
     border-radius: 8px;
-    
     box-shadow: 
         inset 0 0 20px rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.1),
         0 4px 20px rgba(0, 0, 0, 0.5);
-    
     transition: all 0.3s ease;
     cursor: crosshair;
 }
 
-/* Specimen-specific coloring (data-driven) */
+/* Specimen-specific coloring */
 .membrane.has-specimen {
     background: rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.05);
     border: 1px solid rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.3);
@@ -374,7 +370,7 @@ body {
         0 0 20px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.6);
 }
 
-/* Idle Animations - Subtle floating in fluid */
+/* Idle Animations */
 .membrane.anim-float {
     animation: membrane-float var(--anim-speed, 4s) ease-in-out infinite;
 }
@@ -392,29 +388,15 @@ body {
 }
 
 @keyframes membrane-float {
-    0%, 100% { 
-        transform: translateY(0px) translateX(0px);
-    }
-    25% { 
-        transform: translateY(-3px) translateX(1px);
-    }
-    50% { 
-        transform: translateY(-5px) translateX(-1px);
-    }
-    75% { 
-        transform: translateY(-2px) translateX(0px);
-    }
+    0%, 100% { transform: translateY(0px) translateX(0px); }
+    25% { transform: translateY(-3px) translateX(1px); }
+    50% { transform: translateY(-5px) translateX(-1px); }
+    75% { transform: translateY(-2px) translateX(0px); }
 }
 
 @keyframes membrane-breathe {
-    0%, 100% { 
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% { 
-        transform: scale(1.02);
-        opacity: 0.95;
-    }
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.02); opacity: 0.95; }
 }
 
 @keyframes membrane-pulse {
@@ -432,18 +414,10 @@ body {
 }
 
 @keyframes membrane-drift {
-    0%, 100% { 
-        transform: translateX(0px) rotate(0deg);
-    }
-    25% { 
-        transform: translateX(2px) rotate(0.5deg);
-    }
-    50% { 
-        transform: translateX(-2px) rotate(-0.5deg);
-    }
-    75% { 
-        transform: translateX(1px) rotate(0.2deg);
-    }
+    0%, 100% { transform: translateX(0px) rotate(0deg); }
+    25% { transform: translateX(2px) rotate(0.5deg); }
+    50% { transform: translateX(-2px) rotate(-0.5deg); }
+    75% { transform: translateX(1px) rotate(0.2deg); }
 }
 
 .membrane:hover {
@@ -462,7 +436,7 @@ body {
         0 0 20px rgba(var(--membrane-r), var(--membrane-g), var(--membrane-b), 0.6);
 }
 
-/* Empty membranes - COMPLETELY DEAD */
+/* Empty membranes */
 .membrane.empty {
     opacity: 0.3;
     cursor: default;
@@ -482,7 +456,7 @@ body {
     text-shadow: none;
 }
 
-/* MEMBRANE TEXT - BIGGER WITH FLICKER */
+/* MEMBRANE TEXT */
 .membrane-code {
     font-size: 14px;
     font-weight: bold;
@@ -506,10 +480,11 @@ body {
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 3;
+    z-index: 1000;
     animation: fade-in 0.3s ease;
-    overflow-y: auto; /* Allow scrolling if needed */
-    padding: 20px 0; /* Padding for mobile */
+    overflow-y: auto;
+    padding: 20px 0;
+    -webkit-overflow-scrolling: touch;
 }
 
 .popup-overlay.active {
@@ -657,37 +632,28 @@ body {
     transform: translateY(-1px);
 }
 
-/* PASSWORD FLASH - Ocean specimen notification (LEAK-WORM style) */
+/* PASSWORD FLASH */
 .password-flash {
-    /* EXACT CENTER POSITIONING */
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
-    /* TYPOGRAPHY */
     font-family: 'Courier New', monospace;
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
     text-align: center;
-    
-    /* OCEAN COLORS - Deep ocean blue with cyan glow */
     color: rgb(220, 240, 255);
     text-shadow: 
         0 0 10px rgba(0, 200, 255, 1.0),
         0 0 20px rgba(0, 200, 255, 0.8),
         0 0 40px rgba(0, 200, 255, 0.5);
-    
-    /* BEHAVIOR */
-    z-index: 500;
+    z-index: 1500;
     display: none;
     opacity: 0;
     animation: message-flicker 0.15s infinite;
     pointer-events: none;
-    
-    /* CONTAINER BOX */
     padding: 20px 35px;
     background: rgba(0, 30, 50, 0.95);
     border: 1px solid rgba(0, 200, 255, 0.6);
@@ -695,8 +661,6 @@ body {
     box-shadow: 
         0 0 30px rgba(0, 100, 150, 0.5),
         inset 0 0 20px rgba(0, 200, 255, 0.1);
-    
-    /* RESPONSIVE */
     max-width: 85vw;
     line-height: 1.5;
 }
@@ -709,14 +673,11 @@ body {
     60% { opacity: 1; }
 }
 
-.password-flash-text {
-    /* Text inherits styling from parent */
-}
-
 /* BEAM INTERACTIONS */
 .archive-title.beam-approaching,
 .archive-subtitle.beam-approaching,
-.date-tag.beam-approaching {
+.date-tag.beam-approaching,
+.tank-cycle.beam-approaching {
     opacity: 1;
     filter: brightness(1.1);
     transition: all 0.15s ease-out;
@@ -732,7 +693,8 @@ body {
 }
 
 .archive-subtitle.beam-contact,
-.date-tag.beam-contact {
+.date-tag.beam-contact,
+.tank-cycle.beam-contact {
     filter: blur(0px) brightness(1.4) !important;
     text-shadow: 
         0 0 10px rgba(var(--subtitle-r), var(--subtitle-g), var(--subtitle-b), 1.0),
@@ -776,60 +738,41 @@ body {
 
 /* RESPONSIVE */
 @media (max-width: 1024px) and (min-width: 769px) {
-    /* TABLET: 2-column grid */
     .crt {
-        justify-content: flex-start; /* Start at top on tablet */
-        padding: 30px 0;
-    }
-    
-    /* Adjust border for tablet */
-    .tank-border {
-        inset: 6px;
-        border-radius: 10px;
+        justify-content: flex-start;
+        padding: 40px 15px;
     }
     
     .membrane-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
-        justify-items: center; /* Center items within grid */
-        max-width: 600px; /* Constrain width for better centering */
-        margin: 0 auto; /* Center the grid container itself */
+        max-width: 600px;
     }
     
     .membrane {
-        width: 100%; /* Full width of grid column */
-        max-width: 280px; /* But not too wide */
+        width: 100%;
+        max-width: 280px;
     }
 }
 
 @media (max-width: 768px) {
-    /* Ensure proper scrolling on mobile */
     .crt {
-        justify-content: flex-start; /* Always start at top on mobile */
-        padding: 20px 0; /* Reduced padding for mobile */
-    }
-    
-    /* Tighter border on mobile with softer corners */
-    .tank-border {
-        inset: 4px; /* Closer to edge on mobile */
-        border-radius: 8px; /* Slightly tighter radius */
+        padding: 30px 10px;
     }
     
     .membrane-grid {
-        grid-template-columns: 1fr; /* Force single column on mobile */
+        grid-template-columns: 1fr;
         gap: 15px;
         padding: 0 20px;
-        justify-items: center; /* Center items within grid */
-        max-width: 400px; /* Constrain width for better centering */
-        margin: 0 auto; /* Center the grid container itself */
+        max-width: 400px;
     }
     
     .membrane {
         min-height: 70px;
         max-height: 90px;
         padding: 6px 8px;
-        width: 100%; /* Full width of grid column */
-        max-width: 360px; /* But not too wide */
+        width: 100%;
+        max-width: 360px;
     }
     
     .membrane-code {
@@ -858,12 +801,15 @@ body {
         font-size: 9px;
     }
     
-    /* MOBILE POPUP FIXES - Make scrollable */
+    .tank-cycle {
+        font-size: 8px;
+        letter-spacing: 2px;
+    }
+    
     .popup-container {
         padding: 20px;
-        max-height: 85vh; /* Don't exceed viewport */
-        overflow-y: auto; /* Enable scrolling */
-        -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
+        max-height: 85vh;
+        overflow-y: auto;
     }
     
     .popup-title {
@@ -890,21 +836,18 @@ body {
     
     .popup-buttons {
         margin-top: 20px;
-        flex-direction: column; /* Stack buttons vertically */
+        flex-direction: column;
         gap: 10px;
     }
     
     .popup-button {
-        width: 100%; /* Full width buttons */
+        width: 100%;
         padding: 12px 20px;
     }
     
     .password-flash {
         padding: 15px 25px;
         max-width: 90vw;
-    }
-    
-    .password-flash-text {
         font-size: 11px;
         letter-spacing: 2px;
     }
@@ -1040,6 +983,7 @@ body {
     
     <div class="tank-footer">
         <div class="date-tag" id="dateTag"></div>
+        <div class="tank-cycle">TANK_CYCLE1006</div>
     </div>
     
     <div class="popup-overlay" id="popupOverlay">
@@ -1055,7 +999,6 @@ body {
 </div>
 
 <div class="vignette"></div>
-<div class="tank-border"></div>
 <div class="scanlines"></div>
 
 <div class="password-flash" id="passwordFlash">
@@ -1086,7 +1029,6 @@ function generateMembraneGrid() {
         if (specimen.status === 'contained') {
             membrane.classList.add('active');
             
-            // ✅ APPLY SPECIMEN COLOR (Data-Driven)
             if (specimen.color) {
                 const { r, g, b } = specimen.color;
                 membrane.style.setProperty('--specimen-r', r);
@@ -1095,9 +1037,7 @@ function generateMembraneGrid() {
                 membrane.classList.add('has-specimen');
             }
             
-            // ✅ APPLY BEHAVIORS (Data-Driven)
             if (specimen.behaviors) {
-                // Idle animation
                 if (specimen.behaviors.idleAnimation && specimen.behaviors.idleAnimation !== 'none') {
                     membrane.classList.add(`anim-${specimen.behaviors.idleAnimation}`);
                     if (specimen.behaviors.animationSpeed) {
@@ -1105,13 +1045,11 @@ function generateMembraneGrid() {
                     }
                 }
                 
-                // Hover effect class (for future hover customization)
                 if (specimen.behaviors.hoverEffect) {
                     membrane.classList.add(`hover-${specimen.behaviors.hoverEffect}`);
                 }
             }
             
-            // Add classification-based class (for future styling)
             if (specimen.classification) {
                 const classSlug = specimen.classification.toLowerCase().replace(/\s+/g, '-');
                 membrane.classList.add(`class-${classSlug}`);
@@ -1132,7 +1070,7 @@ function generateMembraneGrid() {
         grid.appendChild(membrane);
     });
     
-    console.log('✅ Membranes generated (data-driven colors & behaviors)');
+    console.log('✅ Membranes generated');
 }
 
 function openPopup(specimenId) {
@@ -1181,12 +1119,10 @@ function openPopup(specimenId) {
     
     observeBtn.onclick = () => {
         if (popupData.url) {
-            // Trigger membrane click sound first
             if (window.tankAudio) {
                 window.tankAudio.triggerMembraneClick();
             }
             
-            // Create fade-to-black overlay
             const fadeOverlay = document.createElement('div');
             fadeOverlay.style.cssText = `
                 position: fixed;
@@ -1199,12 +1135,10 @@ function openPopup(specimenId) {
             `;
             document.body.appendChild(fadeOverlay);
             
-            // Start fade
             setTimeout(() => {
                 fadeOverlay.style.opacity = '1';
             }, 10);
             
-            // Navigate after fade completes
             setTimeout(() => {
                 window.location.href = popupData.url;
             }, 700);
@@ -1236,11 +1170,10 @@ function showPasswordFlash() {
     setTimeout(() => {
         flash.style.opacity = '0';
         setTimeout(() => flash.style.display = 'none', 300);
-    }, 2000); // Shows for 2 seconds
+    }, 2000);
 }
 
 function leakSpecimenData(code, password, url) {
-    // Copy ONLY the password - just the equation
     navigator.clipboard.writeText(password).then(() => {
         showPasswordFlash();
     }).catch(err => {
@@ -1263,17 +1196,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    console.log('📋 Initializing LOOKAWAY Tank...');
+    console.log('🔋 Initializing Lookaway Tank...');
     
     const dateTag = document.getElementById('dateTag');
     
-    // Update date and time
     function updateDateTime() {
         const now = new Date();
         const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
         const dateStr = now.toLocaleDateString('en-US', dateOptions);
         
-        // 24-hour format
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const seconds = String(now.getSeconds()).padStart(2, '0');
@@ -1282,7 +1213,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dateTag.textContent = `Tank Access: ${dateStr} — ${timeStr}`;
     }
     
-    // Initial update and start clock
     updateDateTime();
     setInterval(updateDateTime, 1000);
     
@@ -1319,9 +1249,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', resetFlicker);
     
     tank.initialized = true;
-    console.log('✅ LOOKAWAY Tank operational (HOT AMBER + ELECTRIC)');
-    console.log('🧬 Specimen colors applied:', SPECIMENS.countActive(), 'active');
-    console.log('🎭 Behaviors loaded from specimen data');
+    console.log('✅ Lookaway Tank operational');
+    console.log('🧬 Specimens:', SPECIMENS.countActive(), 'active');
 });
 </script>
 

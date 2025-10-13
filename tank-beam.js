@@ -138,7 +138,7 @@ class TankBeamModule {
       const targets = document.querySelectorAll(
         '.membrane:not(.empty), ' +           // Active membranes only
         '.archive-title, .archive-subtitle, ' +  // Header text
-        '.date-tag, ' +                          // Footer date
+        '.date-tag, .tank-cycle, ' +                          // Footer date
         '.popup-title, .popup-label, .popup-value, ' +
         '.popup-description, .popup-warning, .popup-button, ' +
         '.password-note'                         // Password message
