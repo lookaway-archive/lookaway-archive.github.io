@@ -339,4 +339,4 @@ if (typeof window !== 'undefined') {
   window.TANK_CONFIG = TANK_CONFIG;
 }
 
-console.log('✔ tank-config.js loaded - LOOKAWAY Tank configuration active (HOT AMBER PALETTE v3.0)');
+console.log('✓ tank-config.js loaded - LOOKAWAY Tank configuration active (HOT AMBER PALETTE v3.0)');
