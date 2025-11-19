@@ -5,7 +5,7 @@
  * RETRIEVAL: October 2025, Lookaway Archive
  * ============================================
  * 
- * STATUS: Operational - ELECTRIC AMBER v3.0
+ * STATUS: Operational - ELECTRIC AMBER v3.1
  * FUNCTION: Specimen catalog - tracks all contained organisms
  * DEPENDENCIES: None (pure data structure)
  * 
@@ -13,8 +13,8 @@
  * This archive contains the complete registry of all specimens
  * within the LOOKAWAY Tank preservation system. Each specimen
  * entry includes identification, containment status, deployment
- * metadata, access password, visual parameters (NOW USED!),
- * and behavior configurations.
+ * metadata, access password, visual parameters, and behavior
+ * configurations.
  * 
  * Updated to ELECTRIC AMBER palette - specimens glow with hot
  * yellow-amber instead of orange flesh tones, matching the new
@@ -30,8 +30,8 @@
  * - Animation speeds (customizable per specimen)
  * 
  * Current capacity: 12 membrane compartments
- * Active specimens: 1 (LEAK-WORM-847T)
- * Vacant slots: 11 (reserved for future specimens)
+ * Active specimens: 2 (LEAK-WORM-847T, LEAK-WORM-575E)
+ * Vacant slots: 10 (reserved for future specimens)
  * ============================================
  */
 
@@ -42,7 +42,9 @@ const SPECIMENS = {
   // ==========================================
   
   registry: [
+    // ==========================================
     // SLOT 1: LEAK-WORM-847T (Active Specimen)
+    // ==========================================
     {
       id: 1,
       code: "LEAK-WORM-847T",
@@ -90,9 +92,61 @@ const SPECIMENS = {
       }
     },
     
-    // SLOTS 2-12: EMPTY SPECIMENS (Vacant)
-    ...Array(11).fill(null).map((_, i) => ({
-      id: i + 2,
+    // ==========================================
+    // SLOT 2: LEAK-WORM-575E (Active Specimen)
+    // ==========================================
+    {
+      id: 2,
+      code: "LEAK-WORM-575E",
+      status: "contained",
+      deployed: "October 2025",
+      classification: "Interactive Narrative",
+      
+      // SPECIMEN DESCRIPTION
+      description: "Investigates Earth power dynamics through temporal surveillance documentation. Contains Fragment 575E recording temporal consultation between [REDACTED] and Elizabeth I of England (Richmond Palace, May 1575). Explores circular feedback systems in political authority.",
+      
+      // CONTAINMENT WARNING
+      warning: "Specimen contains classified temporal surveillance data. Subject exhibits pattern recognition behaviors across historical power structures. Natural lifecycle: 32 seconds from birth to death without interaction. Fragment includes unauthorized commentary from parasitic entities [CP: ...].",
+      
+      // ACCESS PASSWORD
+      password: "{🌊:🌊∈🌊}",
+      
+      // VISUAL PARAMETERS - Electric amber matching 847T
+      color: { r: 200, g: 165, b: 70 },  // Bright electric yellow-amber
+      
+      // BEHAVIOR CONFIGURATION - Same as 847T for consistency
+      behaviors: {
+        idleAnimation: "float",      // float | breathe | pulse | drift | none
+        animationSpeed: 4,           // seconds per cycle
+        hoverEffect: "glow",         // glow | lift | pulse | ripple
+        hoverIntensity: 1.3,         // multiplier
+        beamReaction: "illuminate"   // illuminate | pulse | glow-strong
+      },
+      
+      // NAVIGATION
+      url: "https://lookaway-archive.github.io/leak-worm-575E/",
+      
+      // PREVIEW CONFIGURATION
+      preview: {
+        shape: "organic",
+        intensity: 0.3,
+        pulse: true
+      },
+      
+      // METADATA
+      metadata: {
+        author: "C.S. & N.C.",
+        season: "02",
+        episode: "02",
+        version: "v1001"
+      }
+    },
+    
+    // ==========================================
+    // SLOTS 3-12: EMPTY SPECIMENS (Vacant)
+    // ==========================================
+    ...Array(10).fill(null).map((_, i) => ({
+      id: i + 3,
       code: "[EMPTY]",
       status: "vacant",
       deployed: null,
@@ -172,15 +226,18 @@ const SPECIMENS = {
       valid = false;
     }
     
-    if (this.countActive() !== 1) {
-      console.error(`❌ Should have 1 active specimen, found ${this.countActive()}`);
+    if (this.countActive() !== 2) {
+      console.error(`❌ Should have 2 active specimens, found ${this.countActive()}`);
       valid = false;
     }
     
     return valid;
   },
   
+  // ==========================================
   // GET POPUP CONTENT - Generate popup data for specimen
+  // ==========================================
+  
   getPopupContent(id) {
     const specimen = this.getById(id);
     if (!specimen) return null;
@@ -215,7 +272,10 @@ const SPECIMENS = {
     };
   },
   
+  // ==========================================
   // GET MEMBRANE DATA - Generate membrane display data
+  // ==========================================
+  
   getMembraneData(id) {
     const specimen = this.getById(id);
     if (!specimen) return null;
@@ -240,4 +300,4 @@ if (typeof window !== 'undefined') {
   window.SPECIMENS = SPECIMENS;
 }
 
-console.log('✔ tank-specimens.js loaded - Registry active (1 contained, 11 vacant, ELECTRIC AMBER)');
+console.log('✔ tank-specimens.js loaded - Registry active (2 contained, 10 vacant, ELECTRIC AMBER v3.1)');
