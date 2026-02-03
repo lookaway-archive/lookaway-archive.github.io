@@ -5,7 +5,7 @@
  * RETRIEVAL: October 2025, Lookaway Archive
  * ============================================
  * 
- * STATUS: Operational - ELECTRIC AMBER v3.1
+ * STATUS: Operational - ELECTRIC AMBER v3.2
  * FUNCTION: Specimen catalog - tracks all contained organisms
  * DEPENDENCIES: None (pure data structure)
  * 
@@ -16,22 +16,11 @@
  * metadata, access password, visual parameters, and behavior
  * configurations.
  * 
- * Updated to ELECTRIC AMBER palette - specimens glow with hot
- * yellow-amber instead of orange flesh tones, matching the new
- * energetic preservation fluid aesthetic.
- * 
- * ARCHITECTURE UPDATE:
- * All visual styling and animations now pulled from specimen data.
- * Adding a new specimen requires ONLY updating this file - no
- * CSS or HTML changes needed. Each organism can have unique:
- * - Colors (applied to membrane borders/glow)
- * - Idle animations (float, breathe, pulse, drift)
- * - Hover effects (glow, lift, pulse, ripple)
- * - Animation speeds (customizable per specimen)
+ * v3.2 UPDATE: Added LEAK-WORM-EROI (Episode 03)
  * 
  * Current capacity: 12 membrane compartments
- * Active specimens: 2 (LEAK-WORM-847T, LEAK-WORM-575E)
- * Vacant slots: 10 (reserved for future specimens)
+ * Active specimens: 3 (LEAK-WORM-847T, LEAK-WORM-575E, LEAK-WORM-EROI)
+ * Vacant slots: 9 (reserved for future specimens)
  * ============================================
  */
 
@@ -143,10 +132,60 @@ const SPECIMENS = {
     },
     
     // ==========================================
-    // SLOTS 3-12: EMPTY SPECIMENS (Vacant)
+    // SLOT 3: LEAK-WORM-EROI (Active Specimen)
     // ==========================================
-    ...Array(10).fill(null).map((_, i) => ({
-      id: i + 3,
+    {
+      id: 3,
+      code: "LEAK-WORM-EROI",
+      status: "contained",
+      deployed: "February 2026",
+      classification: "Visual Philosophy Document",
+      
+      // SPECIMEN DESCRIPTION
+      description: "The specimen presents EROI — Energy Returned on Investment — as both ratio and trapped collector. References TRF-VIS-0042 from Art Theory Division.",
+      
+      // CONTAINMENT WARNING
+      warning: "Specimen disguises philosophical argument as luxury advertisement. Natural lifecycle: 32 seconds from birth to death without interaction. No password required — entry is always available. Exit is the problem.",
+      
+      // ACCESS PASSWORD
+      password: null,  // No password required
+      
+      // VISUAL PARAMETERS - Electric amber matching others
+      color: { r: 200, g: 165, b: 70 },  // Bright electric yellow-amber
+      
+      // BEHAVIOR CONFIGURATION
+      behaviors: {
+        idleAnimation: "float",      // float | breathe | pulse | drift | none
+        animationSpeed: 4,           // seconds per cycle
+        hoverEffect: "glow",         // glow | lift | pulse | ripple
+        hoverIntensity: 1.3,         // multiplier
+        beamReaction: "illuminate"   // illuminate | pulse | glow-strong
+      },
+      
+      // NAVIGATION
+      url: "https://lookaway-archive.github.io/leak-worm-EROI/",
+      
+      // PREVIEW CONFIGURATION
+      preview: {
+        shape: "organic",
+        intensity: 0.3,
+        pulse: true
+      },
+      
+      // METADATA
+      metadata: {
+        author: "C.S. & N.C.",
+        season: "02",
+        episode: "03",
+        version: "v1001"
+      }
+    },
+    
+    // ==========================================
+    // SLOTS 4-12: EMPTY SPECIMENS (Vacant)
+    // ==========================================
+    ...Array(9).fill(null).map((_, i) => ({
+      id: i + 4,
       code: "[EMPTY]",
       status: "vacant",
       deployed: null,
@@ -226,8 +265,8 @@ const SPECIMENS = {
       valid = false;
     }
     
-    if (this.countActive() !== 2) {
-      console.error(`❌ Should have 2 active specimens, found ${this.countActive()}`);
+    if (this.countActive() !== 3) {
+      console.error(`❌ Should have 3 active specimens, found ${this.countActive()}`);
       valid = false;
     }
     
@@ -255,7 +294,7 @@ const SPECIMENS = {
       deployed: specimen.deployed,
       description: specimen.description,
       warning: specimen.warning,
-      password: specimen.password,  // Include password
+      password: specimen.password,  // Include password (null for EROI)
       url: specimen.url,
       buttons: [
         {
@@ -300,4 +339,4 @@ if (typeof window !== 'undefined') {
   window.SPECIMENS = SPECIMENS;
 }
 
-console.log('✔ tank-specimens.js loaded - Registry active (2 contained, 10 vacant, ELECTRIC AMBER v3.1)');
+console.log('✔ tank-specimens.js loaded - Registry active (3 contained, 9 vacant, ELECTRIC AMBER v3.2)');
