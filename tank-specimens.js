@@ -98,7 +98,7 @@ const SPECIMENS = {
       warning: "Specimen contains classified temporal surveillance data. Subject exhibits pattern recognition behaviors across historical power structures. Natural lifecycle: 32 seconds from birth to death without interaction. Fragment includes unauthorized commentary from parasitic entities [CP: ...].",
       
       // ACCESS PASSWORD
-      password: "{🌊:🌊∈🌊}",
+      password: null,  // No password required - opened for TRIH engagement
       
       // VISUAL PARAMETERS - Electric amber matching 847T
       color: { r: 200, g: 165, b: 70 },  // Bright electric yellow-amber
