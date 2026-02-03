@@ -6,7 +6,7 @@ ORGAN: Visual Containment System
 RETRIEVAL: October 2025, Lookaway Archive
 ============================================
 
-STATUS: Operational - HOT AMBER PALETTE v3.0
+STATUS: Operational - HOT AMBER PALETTE v3.2
 FUNCTION: Primary specimen preservation interface
 OFFICIAL NAME: Lookaway Tank - Specimen Preservation System
 DEPENDENCIES: 
@@ -23,6 +23,8 @@ Features hot electric amber aesthetic with energetic center
 (120, 100, 45) radiating through rich glow (180, 160, 90).
 Includes live 24-hour clock, specimen grid with flicker
 animation, and fade-to-black navigation transitions.
+
+v3.2 UPDATE: Added RAW SIGNALS floating button (bottom-right)
 
 Data-driven architecture - specimen colors and behaviors
 pulled from tank-specimens.js registry. Audio defaults to
@@ -673,6 +675,44 @@ body,
     60% { opacity: 1; }
 }
 
+/* RAW SIGNALS FLOATING BUTTON */
+.raw-signals-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 100;
+    padding: 12px 20px;
+    background: rgba(var(--core-r), var(--core-g), var(--core-b), 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.4);
+    border-radius: 4px;
+    color: rgb(var(--text-r), var(--text-g), var(--text-b));
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: crosshair;
+    transition: all 0.3s ease;
+    text-shadow: 
+        0 0 6px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.6);
+    box-shadow: 
+        0 0 15px rgba(var(--core-r), var(--core-g), var(--core-b), 0.3),
+        inset 0 0 10px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.05);
+}
+
+.raw-signals-btn:hover {
+    background: rgba(var(--core-r), var(--core-g), var(--core-b), 0.5);
+    border-color: rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.7);
+    transform: translateY(-2px);
+    box-shadow: 
+        0 0 25px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.4),
+        inset 0 0 15px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.1);
+    text-shadow: 
+        0 0 8px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.8),
+        0 0 16px rgba(var(--glow-r), var(--glow-g), var(--glow-b), 0.5);
+}
+
 /* BEAM INTERACTIONS */
 .archive-title.beam-approaching,
 .archive-subtitle.beam-approaching,
@@ -851,6 +891,14 @@ body,
         font-size: 11px;
         letter-spacing: 2px;
     }
+    
+    .raw-signals-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 15px;
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
 }
 
 /* BEAM SYSTEM */
@@ -997,6 +1045,8 @@ body,
         </div>
     </div>
 </div>
+
+<a href="https://github.com/lookaway-archive/terminal-signals" target="_blank" rel="noopener noreferrer" class="raw-signals-btn">RAW SIGNALS</a>
 
 <div class="vignette"></div>
 <div class="scanlines"></div>
