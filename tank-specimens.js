@@ -5,7 +5,7 @@
  * RETRIEVAL: October 2025, Lookaway Archive
  * ============================================
  *
- * STATUS: Operational - ELECTRIC AMBER v3.3
+ * STATUS: Operational - ELECTRIC AMBER v3.4
  * FUNCTION: Specimen catalog - tracks all contained organisms
  * DEPENDENCIES: None (pure data structure)
  *
@@ -16,16 +16,22 @@
  * metadata, access password, visual parameters, and behavior
  * configurations.
  *
+ * v3.4 UPDATE: Slot 5 status changed to in_progress (LEAK-WORM
+ *              currently being retrieved). New status type added:
+ *              'in_progress' alongside 'contained' and 'vacant'.
+ *              Sharp scatter flicker on membrane, red phosphor color.
+ *              Click triggers ERROR :: SCATTER SIGNAL popup. Active
+ *              count: 4 contained + 1 in-progress + 7 vacant = 12.
  * v3.3 UPDATE: Added LEAK-WORM-847A (Episode 04 — companion specimen
  *              to 847-T under the Linguistic-Substrate Collapse Dossier).
- *              PITCH (previously slotted for E04) moves to pending — see
- *              TANK_LOG.md for episode designation reconciliation.
+ *              PITCH (previously slotted for E04) moves to pending.
  * v3.2 UPDATE: Added LEAK-WORM-EROI (Episode 03)
  *
  * Current capacity: 12 membrane compartments
  * Active specimens: 4 (LEAK-WORM-847T, LEAK-WORM-575E, LEAK-WORM-EROI,
  *                      LEAK-WORM-847A)
- * Vacant slots: 8 (reserved for future specimens)
+ * In-progress slots: 1 (Slot 5 — retrieval in progress)
+ * Vacant slots: 7 (reserved for future specimens)
  * ============================================
  */
 
@@ -237,10 +243,60 @@ const SPECIMENS = {
     },
 
     // ==========================================
-    // SLOTS 5-12: EMPTY SPECIMENS (Vacant)
+    // SLOT 5: [RETRIEVAL IN PROGRESS]
     // ==========================================
-    ...Array(8).fill(null).map((_, i) => ({
-      id: i + 5,
+    // Visible alive slot — signals to readers that specimen retrieval
+    // is happening. Sharp scatter flicker on membrane, red phosphor.
+    // Click triggers ERROR :: SCATTER SIGNAL popup, no navigation.
+    // ==========================================
+    {
+      id: 5,
+      code: "[RETRIEVAL IN PROGRESS]",
+      status: "in_progress",
+      deployed: null,
+      classification: null,
+
+      // SPECIMEN DESCRIPTION
+      description: null,
+
+      // CONTAINMENT WARNING
+      warning: null,
+
+      // ACCESS PASSWORD
+      password: null,
+
+      // VISUAL PARAMETERS - Pirate red, matching corruption phosphor
+      color: { r: 200, g: 30, b: 30 },  // Red — retrieval signal
+
+      // BEHAVIOR CONFIGURATION - Sharp scatter flicker
+      behaviors: {
+        idleAnimation: "scatter",       // sharp interference flicker
+        animationSpeed: 1.2,            // faster than active specimens
+        hoverEffect: "glow",
+        hoverIntensity: 1.5,
+        beamReaction: "illuminate",
+        flicker: "scatter"              // sharp interference style
+      },
+
+      // NAVIGATION - none, slot is not observable
+      url: null,
+
+      // PREVIEW CONFIGURATION - Scatter pattern, more intense
+      preview: {
+        shape: "scatter",
+        intensity: 0.6,
+        pulse: true
+      },
+
+      // METADATA
+      metadata: null
+    },
+
+    // ==========================================
+    // SLOTS 6-12: EMPTY SPECIMENS (Vacant)
+    // ==========================================
+    ...Array(7).fill(null).map((_, i) => ({
+      id: i + 6,
       code: "[EMPTY]",
       status: "vacant",
       deployed: null,
@@ -271,6 +327,10 @@ const SPECIMENS = {
     return this.registry.filter(specimen => specimen.status === 'vacant');
   },
 
+  getInProgress() {
+    return this.registry.filter(specimen => specimen.status === 'in_progress');
+  },
+
   getByCode(code) {
     return this.registry.find(specimen => specimen.code === code);
   },
@@ -283,12 +343,16 @@ const SPECIMENS = {
     return this.getEmpty().length;
   },
 
+  countInProgress() {
+    return this.getInProgress().length;
+  },
+
   getAllIds() {
     return this.registry.map(specimen => specimen.id);
   },
 
   validate() {
-    const requiredFields = ['id', 'code', 'status', 'color', 'url'];
+    const requiredFields = ['id', 'code', 'status', 'color'];
     let valid = true;
 
     this.registry.forEach((specimen, index) => {
@@ -304,13 +368,19 @@ const SPECIMENS = {
         valid = false;
       }
 
-      if (!['contained', 'vacant'].includes(specimen.status)) {
+      if (!['contained', 'vacant', 'in_progress'].includes(specimen.status)) {
         console.error(`❌ Specimen ${specimen.id} has invalid status: ${specimen.status}`);
         valid = false;
       }
 
       if (!specimen.color || typeof specimen.color.r !== 'number') {
         console.error(`❌ Specimen ${specimen.id} has invalid color structure`);
+        valid = false;
+      }
+
+      // Contained specimens must have url; in_progress and vacant must not
+      if (specimen.status === 'contained' && !specimen.url) {
+        console.error(`❌ Specimen ${specimen.id} is contained but missing url`);
         valid = false;
       }
     });
@@ -321,7 +391,17 @@ const SPECIMENS = {
     }
 
     if (this.countActive() !== 4) {
-      console.error(`❌ Should have 4 active specimens, found ${this.countActive()}`);
+      console.error(`❌ Should have 4 contained specimens, found ${this.countActive()}`);
+      valid = false;
+    }
+
+    if (this.countInProgress() !== 1) {
+      console.error(`❌ Should have 1 in-progress specimen, found ${this.countInProgress()}`);
+      valid = false;
+    }
+
+    if (this.countEmpty() !== 7) {
+      console.error(`❌ Should have 7 vacant specimens, found ${this.countEmpty()}`);
       valid = false;
     }
 
@@ -336,12 +416,30 @@ const SPECIMENS = {
     const specimen = this.getById(id);
     if (!specimen) return null;
 
-    // Don't show popup for empty slots
+    // No popup for vacant slots
     if (specimen.status === 'vacant') {
       return null;
     }
 
+    // Error popup for in-progress retrievals (scatter signal)
+    if (specimen.status === 'in_progress') {
+      return {
+        type: "error",
+        title: "ERROR :: SCATTER SIGNAL",
+        body: "[ retrieval in progress ]",
+        buttons: [
+          {
+            text: "ACKNOWLEDGE",
+            action: "close",
+            primary: true
+          }
+        ]
+      };
+    }
+
+    // Standard containment-protocol popup for contained specimens
     return {
+      type: "specimen",
       title: "SPECIMEN CONTAINMENT PROTOCOL",
       code: specimen.code,
       status: specimen.status.toUpperCase(),
@@ -380,8 +478,13 @@ const SPECIMENS = {
       status: specimen.status.toUpperCase(),
       color: specimen.color,
       preview: specimen.preview,
-      clickable: specimen.status === 'contained',
-      isEmpty: specimen.status === 'vacant'
+      // in_progress IS clickable — click triggers error popup, no navigation
+      clickable: specimen.status === 'contained' || specimen.status === 'in_progress',
+      isEmpty: specimen.status === 'vacant',
+      isInProgress: specimen.status === 'in_progress',
+      // Pass flicker style through so renderer can apply scatter animation
+      flicker: specimen.behaviors?.flicker || null,
+      idleAnimation: specimen.behaviors?.idleAnimation || null
     };
   }
 };
@@ -394,4 +497,4 @@ if (typeof window !== 'undefined') {
   window.SPECIMENS = SPECIMENS;
 }
 
-console.log('✔ tank-specimens.js loaded - Registry active (4 contained, 8 vacant, ELECTRIC AMBER v3.3)');
+console.log('✔ tank-specimens.js loaded - Registry active (4 contained, 1 in-progress, 7 vacant, ELECTRIC AMBER v3.4)');
