@@ -19,7 +19,9 @@
  * v3.4 UPDATE: Slot 5 status changed to in_progress (LEAK-WORM
  *              currently being retrieved). New status type added:
  *              'in_progress' alongside 'contained' and 'vacant'.
- *              Sharp scatter flicker on membrane, red phosphor color.
+ *              Sharp scatter flicker on membrane, hot ember phosphor
+ *              color (institutional palette, intensified — not pirate
+ *              red, which broke harmony with active electric amber).
  *              Click triggers ERROR :: SCATTER SIGNAL popup. Active
  *              count: 4 contained + 1 in-progress + 7 vacant = 12.
  * v3.3 UPDATE: Added LEAK-WORM-847A (Episode 04 — companion specimen
@@ -52,38 +54,30 @@ const SPECIMENS = {
       deployed: "October 2025",
       classification: "Interactive Narrative",
 
-      // SPECIMEN DESCRIPTION
       description: "Explores quantum measurement paradox through Tlönian archaeological documentation. The organism exhibits temporal decay behaviors and responds to active observation. Contains Fragment 847-T from the Third Bureau of Reality Cartography.",
 
-      // CONTAINMENT WARNING
       warning: "Specimen requires active observation to maintain stability. Neglect accelerates decay. Natural lifecycle: 32 seconds from birth to death without interaction. Ocean metamorphosis achievable through specific protocols.",
 
-      // ACCESS PASSWORD
       password: "{🌊:🌊∈🌊}",
 
-      // VISUAL PARAMETERS - Electric amber to match tank
-      color: { r: 200, g: 165, b: 70 },  // Bright electric yellow-amber
+      color: { r: 200, g: 165, b: 70 },
 
-      // BEHAVIOR CONFIGURATION - Defines animations & interactions
       behaviors: {
-        idleAnimation: "float",      // float | breathe | pulse | drift | none
-        animationSpeed: 4,           // seconds per cycle
-        hoverEffect: "glow",         // glow | lift | pulse | ripple
-        hoverIntensity: 1.3,         // multiplier
-        beamReaction: "illuminate"   // illuminate | pulse | glow-strong
+        idleAnimation: "float",
+        animationSpeed: 4,
+        hoverEffect: "glow",
+        hoverIntensity: 1.3,
+        beamReaction: "illuminate"
       },
 
-      // NAVIGATION
       url: "/leak-worm-847t/",
 
-      // PREVIEW CONFIGURATION - For future organism rendering
       preview: {
         shape: "organic",
         intensity: 0.3,
         pulse: true
       },
 
-      // METADATA
       metadata: {
         author: "C.S. & N.C.",
         season: "02",
@@ -102,38 +96,30 @@ const SPECIMENS = {
       deployed: "October 2025",
       classification: "Interactive Narrative",
 
-      // SPECIMEN DESCRIPTION
       description: "Investigates Earth power dynamics through temporal surveillance documentation. Contains Fragment 575E recording temporal consultation between [REDACTED] and Elizabeth I of England (Richmond Palace, May 1575). Explores circular feedback systems in political authority.",
 
-      // CONTAINMENT WARNING
       warning: "Specimen contains classified temporal surveillance data. Subject exhibits pattern recognition behaviors across historical power structures. Natural lifecycle: 32 seconds from birth to death without interaction. Fragment includes unauthorized commentary from parasitic entities [CP: ...].",
 
-      // ACCESS PASSWORD
-      password: null,  // No password required - opened for TRIH engagement
+      password: null,
 
-      // VISUAL PARAMETERS - Electric amber matching 847T
-      color: { r: 200, g: 165, b: 70 },  // Bright electric yellow-amber
+      color: { r: 200, g: 165, b: 70 },
 
-      // BEHAVIOR CONFIGURATION - Same as 847T for consistency
       behaviors: {
-        idleAnimation: "float",      // float | breathe | pulse | drift | none
-        animationSpeed: 4,           // seconds per cycle
-        hoverEffect: "glow",         // glow | lift | pulse | ripple
-        hoverIntensity: 1.3,         // multiplier
-        beamReaction: "illuminate"   // illuminate | pulse | glow-strong
+        idleAnimation: "float",
+        animationSpeed: 4,
+        hoverEffect: "glow",
+        hoverIntensity: 1.3,
+        beamReaction: "illuminate"
       },
 
-      // NAVIGATION
       url: "https://lookaway-archive.github.io/leak-worm-575E/",
 
-      // PREVIEW CONFIGURATION
       preview: {
         shape: "organic",
         intensity: 0.3,
         pulse: true
       },
 
-      // METADATA
       metadata: {
         author: "C.S. & N.C.",
         season: "02",
@@ -152,38 +138,30 @@ const SPECIMENS = {
       deployed: "February 2026",
       classification: "Visual Philosophy Document",
 
-      // SPECIMEN DESCRIPTION
       description: "The specimen presents EROI — Energy Returned on Investment — as both ratio and trapped collector. References TRF-VIS-0042 from Art Theory Division.",
 
-      // CONTAINMENT WARNING
       warning: "Specimen disguises philosophical argument as luxury advertisement. Natural lifecycle: 32 seconds from birth to death without interaction. No password required — entry is always available. Exit is the problem.",
 
-      // ACCESS PASSWORD
-      password: null,  // No password required
+      password: null,
 
-      // VISUAL PARAMETERS - Electric amber matching others
-      color: { r: 200, g: 165, b: 70 },  // Bright electric yellow-amber
+      color: { r: 200, g: 165, b: 70 },
 
-      // BEHAVIOR CONFIGURATION
       behaviors: {
-        idleAnimation: "float",      // float | breathe | pulse | drift | none
-        animationSpeed: 4,           // seconds per cycle
-        hoverEffect: "glow",         // glow | lift | pulse | ripple
-        hoverIntensity: 1.3,         // multiplier
-        beamReaction: "illuminate"   // illuminate | pulse | glow-strong
+        idleAnimation: "float",
+        animationSpeed: 4,
+        hoverEffect: "glow",
+        hoverIntensity: 1.3,
+        beamReaction: "illuminate"
       },
 
-      // NAVIGATION
       url: "https://lookaway-archive.github.io/leak-worm-EROI/",
 
-      // PREVIEW CONFIGURATION
       preview: {
         shape: "organic",
         intensity: 0.3,
         pulse: true
       },
 
-      // METADATA
       metadata: {
         author: "C.S. & N.C.",
         season: "02",
@@ -202,38 +180,30 @@ const SPECIMENS = {
       deployed: "April 2026",
       classification: "Recovered Institutional Doctrine",
 
-      // SPECIMEN DESCRIPTION
       description: "Articles of Command Doctrine — composite source text recovered from Earth's institutional archives (naval manuals, corporate governance literature, executive education curricula). Companion to LEAK-WORM-847T under the Linguistic-Substrate Collapse Dossier; civilizational-scale fragment paired with this local-scale source.",
 
-      // CONTAINMENT WARNING
       warning: "Specimen carries six articles of institutional command doctrine recovered from Earth's training materials. The document names its own mechanism without seeing it; [CP:] marginalia surfaces what the institution cannot. Natural lifecycle: 32 seconds. No password required — public-facing institutional material. The document does not change. The reader's code does.",
 
-      // ACCESS PASSWORD
-      password: null,  // Gateless — public-facing institutional doctrine
+      password: null,
 
-      // VISUAL PARAMETERS - Electric amber matching siblings
-      color: { r: 200, g: 165, b: 70 },  // Bright electric yellow-amber
+      color: { r: 200, g: 165, b: 70 },
 
-      // BEHAVIOR CONFIGURATION
       behaviors: {
-        idleAnimation: "float",      // float | breathe | pulse | drift | none
-        animationSpeed: 4,           // seconds per cycle
-        hoverEffect: "glow",         // glow | lift | pulse | ripple
-        hoverIntensity: 1.3,         // multiplier
-        beamReaction: "illuminate"   // illuminate | pulse | glow-strong
+        idleAnimation: "float",
+        animationSpeed: 4,
+        hoverEffect: "glow",
+        hoverIntensity: 1.3,
+        beamReaction: "illuminate"
       },
 
-      // NAVIGATION
       url: "https://lookaway-archive.github.io/leak-worm-847a/",
 
-      // PREVIEW CONFIGURATION
       preview: {
         shape: "organic",
         intensity: 0.3,
         pulse: true
       },
 
-      // METADATA
       metadata: {
         author: "C.S. & N.C.",
         season: "02",
@@ -246,7 +216,10 @@ const SPECIMENS = {
     // SLOT 5: [RETRIEVAL IN PROGRESS]
     // ==========================================
     // Visible alive slot — signals to readers that specimen retrieval
-    // is happening. Sharp scatter flicker on membrane, red phosphor.
+    // is happening. Sharp scatter flicker on membrane, hot ember phosphor.
+    // Color stays in the institutional warm palette family but shifted
+    // toward orange-ember (intensified amber, "burning hotter") rather
+    // than pirate red (which broke palette harmony).
     // Click triggers ERROR :: SCATTER SIGNAL popup, no navigation.
     // ==========================================
     {
@@ -256,39 +229,33 @@ const SPECIMENS = {
       deployed: null,
       classification: null,
 
-      // SPECIMEN DESCRIPTION
       description: null,
 
-      // CONTAINMENT WARNING
       warning: null,
 
-      // ACCESS PASSWORD
       password: null,
 
-      // VISUAL PARAMETERS - Pirate red, matching corruption phosphor
-      color: { r: 200, g: 30, b: 30 },  // Red — retrieval signal
+      // VISUAL PARAMETERS - Hot ember, intensified amber palette
+      color: { r: 220, g: 110, b: 40 },  // Hot ember — burning hotter than active
 
       // BEHAVIOR CONFIGURATION - Sharp scatter flicker
       behaviors: {
-        idleAnimation: "scatter",       // sharp interference flicker
-        animationSpeed: 1.2,            // faster than active specimens
+        idleAnimation: "scatter",
+        animationSpeed: 1.2,
         hoverEffect: "glow",
         hoverIntensity: 1.5,
         beamReaction: "illuminate",
-        flicker: "scatter"              // sharp interference style
+        flicker: "scatter"
       },
 
-      // NAVIGATION - none, slot is not observable
       url: null,
 
-      // PREVIEW CONFIGURATION - Scatter pattern, more intense
       preview: {
         shape: "scatter",
         intensity: 0.6,
         pulse: true
       },
 
-      // METADATA
       metadata: null
     },
 
@@ -378,7 +345,6 @@ const SPECIMENS = {
         valid = false;
       }
 
-      // Contained specimens must have url; in_progress and vacant must not
       if (specimen.status === 'contained' && !specimen.url) {
         console.error(`❌ Specimen ${specimen.id} is contained but missing url`);
         valid = false;
@@ -416,12 +382,10 @@ const SPECIMENS = {
     const specimen = this.getById(id);
     if (!specimen) return null;
 
-    // No popup for vacant slots
     if (specimen.status === 'vacant') {
       return null;
     }
 
-    // Error popup for in-progress retrievals (scatter signal)
     if (specimen.status === 'in_progress') {
       return {
         type: "error",
@@ -437,7 +401,6 @@ const SPECIMENS = {
       };
     }
 
-    // Standard containment-protocol popup for contained specimens
     return {
       type: "specimen",
       title: "SPECIMEN CONTAINMENT PROTOCOL",
@@ -447,7 +410,7 @@ const SPECIMENS = {
       deployed: specimen.deployed,
       description: specimen.description,
       warning: specimen.warning,
-      password: specimen.password,  // Include password (null for gateless)
+      password: specimen.password,
       url: specimen.url,
       buttons: [
         {
@@ -478,11 +441,9 @@ const SPECIMENS = {
       status: specimen.status.toUpperCase(),
       color: specimen.color,
       preview: specimen.preview,
-      // in_progress IS clickable — click triggers error popup, no navigation
       clickable: specimen.status === 'contained' || specimen.status === 'in_progress',
       isEmpty: specimen.status === 'vacant',
       isInProgress: specimen.status === 'in_progress',
-      // Pass flicker style through so renderer can apply scatter animation
       flicker: specimen.behaviors?.flicker || null,
       idleAnimation: specimen.behaviors?.idleAnimation || null
     };

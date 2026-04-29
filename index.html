@@ -27,7 +27,9 @@ animation, and fade-to-black navigation transitions.
 v3.4 UPDATE: in_progress slot status added.
   - generateMembraneGrid() now has three branches: contained,
     in_progress, vacant.
-  - in_progress slot renders with red phosphor color
+  - in_progress slot renders with hot ember phosphor color
+    (institutional amber palette intensified, NOT pirate red —
+    pure red broke harmony with active electric amber)
     + sharp scatter flicker animation.
   - Click on in_progress slot binds and triggers ERROR popup
     (handled in openPopup via popupData.type === 'error').
@@ -36,7 +38,7 @@ v3.4 UPDATE: in_progress slot status added.
     (title + body + ACKNOWLEDGE button) vs containment-protocol
     popup (existing fields + observe + retrieve buttons).
   - CSS additions: .membrane.in-progress, scatter-flicker
-    keyframes, .popup-container.error-popup,
+    keyframes, .popup-container.error-popup (ember-themed),
     .popup-title.error-title, .error-body.
 
 v3.2 UPDATE: Added RAW SIGNALS floating button (bottom-right)
@@ -596,30 +598,31 @@ body,
 
 /* ============================================
    ERROR POPUP — Scatter signal styling
-   Red theme overrides amber on .error-popup variant.
+   Hot ember theme — intensified amber, harmonizes with active
+   specimen palette while signaling distinct state.
    ============================================ */
 
 .popup-container.error-popup {
-    background: rgba(50, 15, 15, 0.55);
-    border: 1px solid rgba(200, 60, 60, 0.65);
+    background: rgba(45, 25, 12, 0.6);
+    border: 1px solid rgba(220, 110, 40, 0.7);
     box-shadow:
-        0 0 60px rgba(200, 30, 30, 0.3),
-        inset 0 0 50px rgba(200, 30, 30, 0.08);
+        0 0 60px rgba(220, 110, 40, 0.35),
+        inset 0 0 50px rgba(220, 110, 40, 0.1);
 }
 
 .popup-title.error-title {
-    color: rgb(230, 130, 130);
+    color: rgb(245, 175, 95);
     text-shadow:
-        0 0 8px rgba(220, 80, 80, 0.9),
-        0 0 16px rgba(220, 80, 80, 0.55),
-        0 0 32px rgba(220, 80, 80, 0.3);
+        0 0 8px rgba(230, 130, 60, 0.9),
+        0 0 16px rgba(230, 130, 60, 0.55),
+        0 0 32px rgba(230, 130, 60, 0.3);
     animation: scatter-flicker 0.7s steps(8) infinite;
 }
 
 .error-body {
     text-align: center;
     font-size: 14px;
-    color: rgba(230, 180, 180, 0.85);
+    color: rgba(245, 200, 150, 0.88);
     letter-spacing: 3px;
     padding: 25px 0 35px 0;
     font-style: italic;
@@ -628,14 +631,14 @@ body,
 }
 
 .popup-button.error-button {
-    background: rgba(200, 60, 60, 0.18);
-    border: 1px solid rgba(200, 60, 60, 0.55);
-    color: rgb(230, 180, 180);
+    background: rgba(220, 110, 40, 0.2);
+    border: 1px solid rgba(220, 110, 40, 0.6);
+    color: rgb(245, 200, 150);
 }
 
 .popup-button.error-button:hover {
-    background: rgba(200, 60, 60, 0.32);
-    box-shadow: 0 0 20px rgba(200, 60, 60, 0.45);
+    background: rgba(220, 110, 40, 0.35);
+    box-shadow: 0 0 20px rgba(230, 130, 60, 0.5);
 }
 
 @keyframes popup-appear {
