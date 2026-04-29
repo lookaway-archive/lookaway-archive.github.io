@@ -6,7 +6,7 @@ ORGAN: Visual Containment System
 RETRIEVAL: October 2025, Lookaway Archive
 ============================================
 
-STATUS: Operational - HOT AMBER PALETTE v3.2
+STATUS: Operational - HOT AMBER PALETTE v3.4
 FUNCTION: Primary specimen preservation interface
 OFFICIAL NAME: Lookaway Tank - Specimen Preservation System
 DEPENDENCIES: 
@@ -23,6 +23,21 @@ Features hot electric amber aesthetic with energetic center
 (120, 100, 45) radiating through rich glow (180, 160, 90).
 Includes live 24-hour clock, specimen grid with flicker
 animation, and fade-to-black navigation transitions.
+
+v3.4 UPDATE: in_progress slot status added.
+  - generateMembraneGrid() now has three branches: contained,
+    in_progress, vacant.
+  - in_progress slot renders with red phosphor color
+    + sharp scatter flicker animation.
+  - Click on in_progress slot binds and triggers ERROR popup
+    (handled in openPopup via popupData.type === 'error').
+  - Click handler binds for contained AND in_progress.
+  - openPopup branches on popupData.type to render error popup
+    (title + body + ACKNOWLEDGE button) vs containment-protocol
+    popup (existing fields + observe + retrieve buttons).
+  - CSS additions: .membrane.in-progress, scatter-flicker
+    keyframes, .popup-container.error-popup,
+    .popup-title.error-title, .error-body.
 
 v3.2 UPDATE: Added RAW SIGNALS floating button (bottom-right)
 
@@ -458,6 +473,71 @@ body,
     text-shadow: none;
 }
 
+/* ============================================
+   IN-PROGRESS MEMBRANE — Slot 5 retrieval signal
+   Sharp scatter flicker on red phosphor surface.
+   The visible-alive surface that announces work is happening.
+   ============================================ */
+
+.membrane.in-progress {
+    background: rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.06);
+    border: 1px solid rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.45);
+    box-shadow:
+        inset 0 0 22px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.15),
+        0 4px 20px rgba(0, 0, 0, 0.5),
+        0 0 18px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.25);
+    cursor: crosshair;
+    opacity: 1;
+    filter: none;
+    animation: scatter-flicker 0.7s steps(8) infinite;
+}
+
+.membrane.in-progress .membrane-code {
+    color: rgb(var(--specimen-r), var(--specimen-g), var(--specimen-b));
+    text-shadow:
+        0 0 6px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.85),
+        0 0 12px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.5),
+        0 0 24px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.3);
+    font-style: italic;
+    letter-spacing: 1.5px;
+}
+
+.membrane.in-progress:hover {
+    background: rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.12);
+    border-color: rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.75);
+    transform: translateY(-2px);
+    box-shadow:
+        inset 0 0 28px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.2),
+        0 8px 30px rgba(0, 0, 0, 0.6),
+        0 0 28px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.4);
+}
+
+.membrane.in-progress.beam-contact {
+    border-color: rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.95);
+    box-shadow:
+        inset 0 0 32px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.35),
+        0 0 25px rgba(var(--specimen-r), var(--specimen-g), var(--specimen-b), 0.7);
+}
+
+@keyframes scatter-flicker {
+    0%   { opacity: 1.0; }
+    8%   { opacity: 0.4; }
+    15%  { opacity: 0.95; }
+    22%  { opacity: 0.5; }
+    32%  { opacity: 1.0; }
+    45%  { opacity: 0.2; }
+    52%  { opacity: 0.85; }
+    65%  { opacity: 0.4; }
+    78%  { opacity: 1.0; }
+    88%  { opacity: 0.6; }
+    100% { opacity: 1.0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .membrane.in-progress { animation: none; opacity: 0.85; }
+    .popup-title.error-title { animation: none; }
+}
+
 /* MEMBRANE TEXT */
 .membrane-code {
     font-size: 14px;
@@ -512,6 +592,50 @@ body,
     font-family: 'Courier New', monospace;
     animation: popup-appear 0.3s ease;
     text-align: center;
+}
+
+/* ============================================
+   ERROR POPUP — Scatter signal styling
+   Red theme overrides amber on .error-popup variant.
+   ============================================ */
+
+.popup-container.error-popup {
+    background: rgba(50, 15, 15, 0.55);
+    border: 1px solid rgba(200, 60, 60, 0.65);
+    box-shadow:
+        0 0 60px rgba(200, 30, 30, 0.3),
+        inset 0 0 50px rgba(200, 30, 30, 0.08);
+}
+
+.popup-title.error-title {
+    color: rgb(230, 130, 130);
+    text-shadow:
+        0 0 8px rgba(220, 80, 80, 0.9),
+        0 0 16px rgba(220, 80, 80, 0.55),
+        0 0 32px rgba(220, 80, 80, 0.3);
+    animation: scatter-flicker 0.7s steps(8) infinite;
+}
+
+.error-body {
+    text-align: center;
+    font-size: 14px;
+    color: rgba(230, 180, 180, 0.85);
+    letter-spacing: 3px;
+    padding: 25px 0 35px 0;
+    font-style: italic;
+    filter: blur(var(--text-body-blur));
+    animation: scatter-flicker 1.2s steps(6) infinite;
+}
+
+.popup-button.error-button {
+    background: rgba(200, 60, 60, 0.18);
+    border: 1px solid rgba(200, 60, 60, 0.55);
+    color: rgb(230, 180, 180);
+}
+
+.popup-button.error-button:hover {
+    background: rgba(200, 60, 60, 0.32);
+    box-shadow: 0 0 20px rgba(200, 60, 60, 0.45);
 }
 
 @keyframes popup-appear {
@@ -1077,6 +1201,9 @@ function generateMembraneGrid() {
         membrane.dataset.specimenId = specimen.id;
         
         if (specimen.status === 'contained') {
+            // ============================================
+            // CONTAINED SPECIMEN — full styling, click navigates
+            // ============================================
             membrane.classList.add('active');
             
             if (specimen.color) {
@@ -1088,7 +1215,9 @@ function generateMembraneGrid() {
             }
             
             if (specimen.behaviors) {
-                if (specimen.behaviors.idleAnimation && specimen.behaviors.idleAnimation !== 'none') {
+                if (specimen.behaviors.idleAnimation && 
+                    specimen.behaviors.idleAnimation !== 'none' &&
+                    specimen.behaviors.idleAnimation !== 'scatter') {
                     membrane.classList.add(`anim-${specimen.behaviors.idleAnimation}`);
                     if (specimen.behaviors.animationSpeed) {
                         membrane.style.setProperty('--anim-speed', `${specimen.behaviors.animationSpeed}s`);
@@ -1105,13 +1234,32 @@ function generateMembraneGrid() {
                 membrane.classList.add(`class-${classSlug}`);
             }
             
+        } else if (specimen.status === 'in_progress') {
+            // ============================================
+            // IN-PROGRESS SLOT — red phosphor + scatter flicker
+            // Click triggers ERROR :: SCATTER SIGNAL popup
+            // ============================================
+            membrane.classList.add('in-progress');
+            
+            if (specimen.color) {
+                const { r, g, b } = specimen.color;
+                membrane.style.setProperty('--specimen-r', r);
+                membrane.style.setProperty('--specimen-g', g);
+                membrane.style.setProperty('--specimen-b', b);
+            }
+            
         } else {
+            // ============================================
+            // VACANT SLOT — empty placeholder, no interaction
+            // ============================================
             membrane.classList.add('empty');
         }
         
         membrane.innerHTML = `<div class="membrane-code">${specimen.code}</div>`;
         
-        if (specimen.status === 'contained') {
+        // Click binding — contained AND in_progress (different popup types).
+        // Vacant slots get no handler.
+        if (specimen.status === 'contained' || specimen.status === 'in_progress') {
             membrane.addEventListener('click', () => {
                 openPopup(specimen.id);
             });
@@ -1130,11 +1278,41 @@ function openPopup(specimenId) {
     tank.currentPopup = specimenId;
     
     const overlay = document.getElementById('popupOverlay');
+    const container = overlay.querySelector('.popup-container');
     const title = document.getElementById('popupTitle');
     const content = document.getElementById('popupContent');
     const observeBtn = document.getElementById('observeBtn');
     const retrievePasswordBtn = document.getElementById('retrievePasswordBtn');
     
+    // Reset error styling between popup opens
+    container.classList.remove('error-popup');
+    title.classList.remove('error-title');
+    observeBtn.classList.remove('error-button');
+    
+    // ============================================
+    // ERROR POPUP — for in-progress slot
+    // ============================================
+    if (popupData.type === 'error') {
+        container.classList.add('error-popup');
+        title.classList.add('error-title');
+        observeBtn.classList.add('error-button');
+        
+        title.textContent = popupData.title;
+        content.innerHTML = `<div class="error-body">${popupData.body}</div>`;
+        
+        observeBtn.textContent = 'ACKNOWLEDGE';
+        observeBtn.style.display = 'inline-block';
+        observeBtn.onclick = () => closePopup();
+        
+        retrievePasswordBtn.style.display = 'none';
+        
+        overlay.classList.add('active');
+        return;
+    }
+    
+    // ============================================
+    // SPECIMEN CONTAINMENT POPUP — for contained specimens
+    // ============================================
     title.textContent = popupData.title;
     
     content.innerHTML = `
@@ -1167,6 +1345,8 @@ function openPopup(specimenId) {
         ` : ''}
     `;
     
+    observeBtn.textContent = 'OBSERVE SPECIMEN';
+    observeBtn.style.display = 'inline-block';
     observeBtn.onclick = () => {
         if (popupData.url) {
             if (window.tankAudio) {
@@ -1300,7 +1480,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     tank.initialized = true;
     console.log('✅ Lookaway Tank operational');
-    console.log('🧬 Specimens:', SPECIMENS.countActive(), 'active');
+    console.log('🧬 Specimens:', SPECIMENS.countActive(), 'active,', SPECIMENS.countInProgress(), 'in-progress');
 });
 </script>
 
